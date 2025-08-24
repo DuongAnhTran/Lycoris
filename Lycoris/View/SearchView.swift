@@ -12,6 +12,7 @@ import SwiftUI
 struct SearchView: View {
     @StateObject var loader = LrcRecordLoader()
     @State var query = ""
+    @State var clickedReset = false
     
     //For different tabs for different results:
     @State private var selectedCategory: SearchCategory = .all
@@ -174,12 +175,26 @@ struct SearchView: View {
                     .progressViewStyle(CircularProgressViewStyle())
             }
         }
-        .navigationTitle("Search")
+        // Title of the view + the rest button for restting search results
+        .navigationTitle("Search Lyrics")
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading){
+            ToolbarItem(placement: .topBarTrailing){
+                // The reset button
                 Button("Reset", action:{
-                    loader.resetResult()
+                    clickedReset = true
                 })
+                .foregroundStyle(.red)
+                .alert("Notification", isPresented: $clickedReset){
+                    Button("Reset", role:.destructive){
+                        loader.resetResult()
+                        clickedReset = false
+                        query = ""
+                    }
+                    
+                    Button("No", role: .cancel){}
+                } message: {
+                    Text("You are resetting the search result. Are you sure?")
+                }
             }
         }
             

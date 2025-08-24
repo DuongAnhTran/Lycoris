@@ -10,6 +10,20 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        Text("Hello, World!")
+        NavigationStack{
+            NavigationLink(destination: SearchView()) {
+                Text("Get Started")
+                    .font(.title)
+                    .frame(width: 180, height: 80)
+                    .cornerRadius(10)
+                    .background(RoundedRectangle(cornerRadius: 10)
+                        .fill(.black))
+                    .foregroundColor(.white)
+            }
+        }
     }
+}
+
+#Preview {
+    HomeView()
 }
