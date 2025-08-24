@@ -137,6 +137,13 @@ class LrcRecordLoader: ObservableObject {
     }
 
     
+    func resetResult() {
+        results.removeAll()
+        resultsSong.removeAll()
+        resultsAlbum.removeAll()
+        resultsArtist.removeAll()        
+    }
+    
     
     
 }

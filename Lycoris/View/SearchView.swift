@@ -174,6 +174,15 @@ struct SearchView: View {
                     .progressViewStyle(CircularProgressViewStyle())
             }
         }
+        .navigationTitle("Search")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading){
+                Button("Reset", action:{
+                    loader.resetResult()
+                })
+            }
+        }
+            
         
     }
     
