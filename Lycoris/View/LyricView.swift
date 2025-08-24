@@ -12,20 +12,53 @@ import SwiftUI
 struct LyricView: View {
     
     let song: LrcRecord
+    @State private var options: LyricOption = .showPlainText
     
     var body: some View {
         ScrollView {
-            
-            
             VStack(alignment: .center) {
-                Text("\(song.trackName ?? "No Name")")
-                    .font(.title2)
-                HStack{
+                VStack {
+                    Text("\(song.trackName ?? "No Name")")
+                        .font(.title2)
+                        .padding()
+                    
+                    Text("ID: \(song.id ?? 0)")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 10)
+                    
                     Text("Artist: \(song.artistName ?? "No Info")")
                         .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 10)
+                    
                     Text("Album: \(song.albumName ?? "No Info")")
                         .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 10)
                 }
+                
+                Picker("Category", selection: $options) {
+                    ForEach(LyricOption.allCases) { option in
+                        Text(option.rawValue).tag(option)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding()
+                
+                switch options {
+                case .showPlainText:
+                    Text(song.plainLyrics ?? "No Lyrics found for this song.")
+                        .font(.body)
+                        .padding()
+
+                case .showSyncedText:
+                    Text(song.syncedLyrics ?? "No Synced Lyrics for this song.")
+                        .font(.body)
+                        .padding()
+
+                }
+                                
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -37,6 +70,16 @@ struct LyricView: View {
         }
     }
 }
+
+enum LyricOption: String, CaseIterable, Identifiable {
+    var id: String {rawValue}
+    
+    case showPlainText = "Show Plain Text"
+    case showSyncedText = "Show Synced Text"
+}
+
+
+
 
 #Preview {
     let testSong = LrcRecord(

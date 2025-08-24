@@ -183,7 +183,8 @@ struct SearchView: View {
                 Button("Reset", action:{
                     clickedReset = true
                 })
-                .foregroundStyle(.red)
+                .disabled(loader.loading == true)
+                .foregroundStyle(loader.loading ? Color.gray : Color.red)
                 .alert("Notification", isPresented: $clickedReset){
                     Button("Reset", role:.destructive){
                         loader.resetResult()
