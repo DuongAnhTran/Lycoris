@@ -12,14 +12,22 @@ import Foundation
 class LrcRecordLoader: ObservableObject {
     
     @Published var results: [LrcRecord] = []
+    @Published var resultsAlbum: [LrcRecord] = []
+    @Published var resultsSong: [LrcRecord] = []
+    @Published var resultsArtist: [LrcRecord] = []
+    
     @Published var query: String = ""
     @Published var loading: Bool = false
     @Published var found: Bool = true
+    @Published var foundSong: Bool = true
+    @Published var foundArtist: Bool = true
+    @Published var foundAlbum: Bool = true
     
     
-    @MainActor
+    
     func fetchResults(query: String) async {
-        loading = true
+        results.removeAll()
+        
         
         if query == "" {
             self.results = []
@@ -42,26 +50,93 @@ class LrcRecordLoader: ObservableObject {
             self.results = []
             print("Error fetching or decoding: \(error)")
         }
-        loading.toggle()
+       
         
         if results.isEmpty {
             found = false
         } else {
             found = true
         }
-        
     }
     
     
     
     
-    func filterSong() async {
-        if query.isEmpty {
-            results = []
+    
+    
+    func fetchResultsSong(query: String) async {
+        resultsSong.removeAll()
+        
+        
+        if query == "" {
+            self.resultsSong = []
+            return
+        }
+        
+        var comps = URLComponents(string: "https://lrclib.net/api/search")!
+        comps.queryItems = [URLQueryItem(name: "track_name", value: query)]
+        
+        guard let url = comps.url else {
+            self.resultsSong = []
+            return
+        }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoded = try JSONDecoder().decode([LrcRecord].self, from: data)
+            self.resultsSong = decoded
+        } catch {
+            self.resultsSong = []
+            print("Error fetching or decoding: \(error)")
+        }
+        
+        
+        if resultsSong.isEmpty {
+            foundSong = false
         } else {
-            await fetchResults(query: query)
+            foundSong = true
+        }
+    
+    }
+    
+    
+    
+    
+    func fetchResultAlbum(results: [LrcRecord], query: String) {
+        resultsAlbum.removeAll()
+        
+        for song in self.results {
+            if song.albumName?.lowercased().contains(query.lowercased()) == true {
+                resultsAlbum.append(song)
+            }
+        }
+        
+        if resultsAlbum.isEmpty {
+            foundAlbum = false
+        } else {
+            foundAlbum = true
         }
     }
+    
+    
+    
+    func fetchResultArtist(results: [LrcRecord], query: String) {
+        resultsArtist.removeAll()
+        
+        for song in self.results {
+            if song.artistName?.lowercased().contains(query.lowercased()) == true {
+                resultsArtist.append(song)
+            }
+        }
+        
+        if resultsArtist.isEmpty {
+            foundArtist = false
+        } else {
+            foundArtist = true
+        }
+    }
+
+    
     
     
 }

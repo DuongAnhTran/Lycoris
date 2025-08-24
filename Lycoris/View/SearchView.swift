@@ -13,35 +13,122 @@ struct SearchView: View {
     @StateObject var loader = LrcRecordLoader()
     @State var query = ""
     
+    //For different tabs for different results:
+    @State private var selectedCategory: SearchCategory = .all
+
+    
     var body: some View {
+        
+
         NavigationStack{
             if loader.loading == false {
+                
+                Picker("Category", selection: $selectedCategory) {
+                    ForEach(SearchCategory.allCases) { category in
+                        Text(category.rawValue).tag(category)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                
                 ZStack {
-                    List(loader.results) { song in
-                        NavigationLink {
-                            LyricView(song: song)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 10){
-                                Text("\(song.trackName ?? "None")")
-                                    .font(.headline)
-                                
-                                Text("Artist: \(song.artistName ?? "None")")
-                                    .font(.subheadline)
-                                    .lineLimit(1)
-                                
-                                Text("Album: \(song.albumName ?? "None")")
-                                    .font(.subheadline)
+                    List {
+                        switch selectedCategory {
+                        case .all:
+                            ForEach(loader.results) { song in
+                                NavigationLink {
+                                    LyricView(song: song)
+                                } label: {
+                                    VStack(alignment: .leading, spacing: 10){
+                                        Text("\(song.trackName ?? "None")")
+                                            .font(.headline)
+                                        
+                                        Text("Artist: \(song.artistName ?? "None")")
+                                            .font(.subheadline)
+                                            .lineLimit(1)
+                                        
+                                        Text("Album: \(song.albumName ?? "None")")
+                                            .font(.subheadline)
+                                    }
+                                }
+                            }
+                        
+                            
+                        case .songs:
+                            ForEach(loader.resultsSong) { song in
+                                NavigationLink {
+                                    LyricView(song: song)
+                                } label: {
+                                    VStack(alignment: .leading, spacing: 10){
+                                        Text("\(song.trackName ?? "None")")
+                                            .font(.headline)
+                                        
+                                        Text("Artist: \(song.artistName ?? "None")")
+                                            .font(.subheadline)
+                                            .lineLimit(1)
+                                        
+                                        Text("Album: \(song.albumName ?? "None")")
+                                            .font(.subheadline)
+                                    }
+                                }
+                            }
+                            
+                        case .artists:
+                            ForEach(loader.resultsArtist) { song in
+                                NavigationLink {
+                                    LyricView(song: song)
+                                } label: {
+                                    VStack(alignment: .leading, spacing: 10){
+                                        Text("\(song.trackName ?? "None")")
+                                            .font(.headline)
+                                        
+                                        Text("Artist: \(song.artistName ?? "None")")
+                                            .font(.subheadline)
+                                            .lineLimit(1)
+                                        
+                                        Text("Album: \(song.albumName ?? "None")")
+                                            .font(.subheadline)
+                                    }
+                                }
+                            }
+                        
+                        case .albums:
+                            ForEach(loader.resultsAlbum) { song in
+                                NavigationLink {
+                                    LyricView(song: song)
+                                } label: {
+                                    VStack(alignment: .leading, spacing: 10){
+                                        Text("\(song.trackName ?? "None")")
+                                            .font(.headline)
+                                        
+                                        Text("Artist: \(song.artistName ?? "None")")
+                                            .font(.subheadline)
+                                            .lineLimit(1)
+                                        
+                                        Text("Album: \(song.albumName ?? "None")")
+                                            .font(.subheadline)
+                                    }
+                                }
+                            }
+                        
+                            
+                        }
+                    }
+                        .searchable(text: $query, placement: .navigationBarDrawer(displayMode: (.always)), prompt: "Search")
+                        .onSubmit(of: .search) {
+                            Task {
+                                loader.loading = true
+                                await loader.fetchResults(query: query)
+                                await loader.fetchResultsSong(query: query)
+                                loader.fetchResultAlbum(results: loader.results, query: query)
+                                loader.fetchResultArtist(results: loader.results, query: query)
+                                loader.loading = false
+                               
+                                print(loader.results)
                             }
                         }
-                    }
-                    .searchable(text: $query, placement: .navigationBarDrawer(displayMode: (.always)), prompt: "Search")
-                    .onSubmit(of: .search) {
-                        Task {
-                            await loader.fetchResults(query: query)
-                            print(loader.results)
-                        }
-                    }
                     
+                    //Notification before searching and after searching for each category
                     if (loader.results.isEmpty) && (loader.found == true) {
                         HStack{
                             Text("Start searching your lyrics")
@@ -53,17 +140,56 @@ struct SearchView: View {
                     } else if (loader.found == false){
                         Text("No result found. Please search again :<")
                             .font(.headline)
+                    } else {
+                        switch selectedCategory {
+                        case .all:
+                            Text("")
+                        case .songs:
+                            if (!loader.foundSong) {
+                                Text("No result in the category found. Please check other categories")
+                                    .font(.headline)
+                            } else {
+                                Text("")
+                            }
+                        case .artists:
+                            if (!loader.foundArtist) {
+                                Text("No result in the category found. Please check other categories")
+                                    .font(.headline)
+                            } else {
+                                Text("")
+                            }
+                        case .albums:
+                            if (!loader.foundAlbum) {
+                                Text("No result in the category found. Please check other categories")
+                                    .font(.headline)
+                            } else {
+                                Text("")
+                            }
+                        }
                     }
                 }
 
             } else {
-                ProgressView("I'm Loading chill out cuh...")
+                ProgressView("Fetching your lyrics. Please wait a moment.")
                     .progressViewStyle(CircularProgressViewStyle())
             }
         }
         
     }
     
+}
+
+
+
+// Enumarate for different result tabs of the search
+enum SearchCategory: String, CaseIterable, Identifiable {
+    case all = "All"
+    case songs = "Songs"
+    case artists = "Artists"
+    case albums = "Albums"
+    
+    //Just giving a readable string as id for each case - conforming Identifiable
+    var id: String { rawValue }
 }
 
 
