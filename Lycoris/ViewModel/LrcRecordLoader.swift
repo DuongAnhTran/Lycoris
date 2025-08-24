@@ -14,6 +14,7 @@ class LrcRecordLoader: ObservableObject {
     @Published var results: [LrcRecord] = []
     @Published var query: String = ""
     @Published var loading: Bool = false
+    @Published var found: Bool = true
     
     
     @MainActor
@@ -41,9 +42,14 @@ class LrcRecordLoader: ObservableObject {
             self.results = []
             print("Error fetching or decoding: \(error)")
         }
-        
-        
         loading.toggle()
+        
+        if results.isEmpty {
+            found = false
+        } else {
+            found = true
+        }
+        
     }
     
     
