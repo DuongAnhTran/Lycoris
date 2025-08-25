@@ -12,7 +12,12 @@ import SwiftUI
 struct LyricView: View {
     
     let song: LrcRecord
+    //@ObservedObject var loader: LrcRecordLoader
     @State private var options: LyricOption = .showPlainText
+    @State private var addSong: Bool = false
+    @EnvironmentObject var cacher: LrcRecordCacher
+    @State private var selected: Int? = nil
+    @StateObject var lyricsViewModel: LyricsViewModel
     
     var body: some View {
         ScrollView {
@@ -64,9 +69,33 @@ struct LyricView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        //Do the adding
+                        addSong = true
                     }) {
                         Image(systemName: "plus")
+                    }
+                    .sheet(isPresented: $addSong) {
+                        var playlists = cacher.loadFromCache()
+                        Picker("Select Playlist", selection: $selected) {
+                            ForEach(playlists.indices, id: \.self) { index in
+                                Text(playlists[index].name)
+                                    .tag(index)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        
+                        Button("Add", role: .destructive) {
+                            if selected != nil {
+                                guard playlists.indices.contains(selected!) else { return }
+                                lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
+                                cacher.saveToCache(playlists: playlists)
+                                addSong = false
+                            }
+                        }
+                        .disabled(selected == nil)
+                        
+                        Button("Cancel", role: .cancel) {
+                            addSong = false
+                        }
                     }
                 }
             }
@@ -95,6 +124,7 @@ enum LyricOption: String, CaseIterable, Identifiable {
         plainLyrics: "Placholder plain lyrics.",
         syncedLyrics: "[00:00.00] Placeholder Lyrics."
     )
-    LyricView(song: testSong)
+    LyricView(song: testSong, lyricsViewModel: LyricsViewModel())
+        .environmentObject(LrcRecordCacher())
 }
 

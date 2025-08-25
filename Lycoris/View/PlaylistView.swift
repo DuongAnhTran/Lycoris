@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PlaylistView: View {
+    @StateObject var loader = LrcRecordLoader()
     @EnvironmentObject var cacher: LrcRecordCacher
     @State var playlists: [LrcGroup] = []
     @State private var addPlaylist: Bool = false
@@ -30,7 +31,7 @@ struct PlaylistView: View {
                     ForEach(cacher.loadFromCache(), id: \.id) { playlist in
                         NavigationLink {
                             // Show view for each playlist
-                            SongsView(songs: playlist)
+                            PlaylistDetailsView(playlist: playlist)
                         } label: {
                             playlistInfo(Text1: playlist.name, Text2: formatter.string(from: playlist.creationTime))
                         }
@@ -38,7 +39,7 @@ struct PlaylistView: View {
             }
             
         }
-        .navigationTitle("Search Lyrics")
+        .navigationTitle("Playlists")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing){
                 Button(action: {

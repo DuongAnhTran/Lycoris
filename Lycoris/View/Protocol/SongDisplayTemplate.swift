@@ -20,7 +20,8 @@ extension SongDisplayTemplate {
     var body: some View {
         ForEach(listContent) { content in
             NavigationLink {
-                LyricView(song: content)
+                LyricView(song: content, lyricsViewModel: LyricsViewModel())
+                    .environmentObject(LrcRecordCacher())
             } label: {
                 VStack(alignment: .leading, spacing: 10){
                     Text("\(content.trackName ?? "None")")

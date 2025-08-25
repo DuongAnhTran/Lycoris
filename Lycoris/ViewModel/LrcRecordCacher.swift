@@ -8,11 +8,11 @@
 import Foundation
 
 class LrcRecordCacher: ObservableObject {
-    @Published var playlist: [LrcGroup] = []
+    @Published var playlists: [LrcGroup] = []
     
-    func saveToCache (playlist: [LrcGroup]) {
+    func saveToCache (playlists: [LrcGroup]) {
         let encoder = JSONEncoder()
-        if let encodeData = try? encoder.encode(playlist) {
+        if let encodeData = try? encoder.encode(playlists) {
             UserDefaults.standard.set(encodeData, forKey: "CachedPlaylist")
         }
     }
@@ -31,9 +31,9 @@ class LrcRecordCacher: ObservableObject {
     
     
     func addPlaylist(name: String) {
-        playlist = loadFromCache()
-        playlist.append(LrcGroup(name: name, creationTime: Date()))
-        saveToCache(playlist: playlist)
+        playlists = loadFromCache()
+        playlists.append(LrcGroup(name: name, creationTime: Date()))
+        saveToCache(playlists: playlists)
     }
     
 

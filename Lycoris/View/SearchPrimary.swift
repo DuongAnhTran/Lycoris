@@ -58,8 +58,7 @@ struct SearchPrimary: View {
                                 loader.fetchResultAlbum(results: loader.results, query: query)
                                 loader.fetchResultArtist(results: loader.results, query: query)
                                 loader.loading = false
-                                
-                                print(loader.results)
+                                //print(loader.results)
                             }
                         }
                         
