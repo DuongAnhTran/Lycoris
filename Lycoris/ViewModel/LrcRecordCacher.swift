@@ -19,7 +19,6 @@ class LrcRecordCacher: ObservableObject {
     
     
     func loadFromCache() -> [LrcGroup] {
-        //playlist = []
         if let data = UserDefaults.standard.data(forKey: "CachedPlaylist") {
             let decoder = JSONDecoder()
             if let decodeData = try? decoder.decode([LrcGroup].self, from: data) {
@@ -32,7 +31,8 @@ class LrcRecordCacher: ObservableObject {
     
     
     func addPlaylist(name: String) {
-        playlist.append(LrcGroup(name: name))
+        playlist = loadFromCache()
+        playlist.append(LrcGroup(name: name, creationTime: Date()))
         saveToCache(playlist: playlist)
     }
     

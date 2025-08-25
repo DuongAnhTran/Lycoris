@@ -13,19 +13,28 @@ struct PlaylistView: View {
     @State var playlists: [LrcGroup] = []
     @State private var addPlaylist: Bool = false
     @State private var newPlaylistName: String = ""
+    let formatter: DateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "dd-MM-yyyy" // or any format you prefer
+        return format
+    }()
+
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(cacher.loadFromCache(), id: \.id) { playlist in
-                    NavigationLink {
-                        // Show view for each playlist
-                        Text(playlist.name)
-                    } label: {
-                        Text("\(playlist.name)")
-                            .font(.headline)
+                    playlistInfo(Text1: "Playlist", Text2: "Create date", font: .headline)
+                        .padding(.trailing, 17.9)
+                        
+                    
+                    ForEach(cacher.loadFromCache(), id: \.id) { playlist in
+                        NavigationLink {
+                            // Show view for each playlist
+                            SongsView(songs: playlist)
+                        } label: {
+                            playlistInfo(Text1: playlist.name, Text2: formatter.string(from: playlist.creationTime))
+                        }
                     }
-                }
             }
             
         }
@@ -58,6 +67,14 @@ struct PlaylistView: View {
     }
 }
 
+
+
+
+struct playlistInfo: TwoColumnList {
+    var Text1: String = ""
+    var Text2: String = ""
+    var font: Font?
+}
 
 
 #Preview {
