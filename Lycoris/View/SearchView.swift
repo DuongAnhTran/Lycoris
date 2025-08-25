@@ -14,10 +14,13 @@ struct SearchView: View {
     @State var query = ""
     @State var clickedReset = false
     
+    
+    var isPhone = (UIDevice.current.userInterfaceIdiom == .phone)
+    
     //For different tabs for different results:
     @State private var selectedCategory: SearchCategory = .all
 
-    
+    // This view will have one child being `SearchPrimary` to store all the UI elements
     var body: some View {
         SearchPrimary(loader: loader, query: $query, selectedCategory: $selectedCategory, clickedReset: $clickedReset)
     }

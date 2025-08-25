@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct LrcRecord: Decodable, Identifiable, ModelTemplate {
+struct LrcRecord: Codable, Identifiable, ModelTemplate {
     let id: Int?
     let trackName: String?
     let artistName: String?
