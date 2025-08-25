@@ -20,6 +20,15 @@ struct HomeView: View {
                         .fill(.black))
                     .foregroundColor(.white)
             }
+            NavigationLink(destination: PlaylistView().environmentObject(LrcRecordCacher())) {
+                Text("Your Playlist")
+                    .font(.title)
+                    .frame(width: 180, height: 80)
+                    .cornerRadius(10)
+                    .background(RoundedRectangle(cornerRadius: 10)
+                        .fill(.black))
+                    .foregroundColor(.white)
+            }
         }
     }
 }

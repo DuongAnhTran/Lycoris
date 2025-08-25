@@ -8,7 +8,5 @@
 import Foundation
 
 protocol ModelTemplate {
-    var id: Int? { get }
-    
     func showID()
 }
