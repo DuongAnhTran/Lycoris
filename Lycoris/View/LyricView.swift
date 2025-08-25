@@ -60,11 +60,14 @@ struct LyricView: View {
                 }
                                 
             }
+            .navigationTitle("Song Information")
             .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Song Information")
-                        .font(.largeTitle)
-                        .padding()
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        //Do the adding
+                    }) {
+                        Image(systemName: "plus")
+                    }
                 }
             }
         }
