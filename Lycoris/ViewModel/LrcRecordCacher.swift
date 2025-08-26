@@ -36,6 +36,13 @@ class LrcRecordCacher: ObservableObject {
         saveToCache(playlists: playlists)
     }
     
+    
+    func deletePlaylist(at offsets: IndexSet) {
+        playlists = loadFromCache()
+        playlists.remove(atOffsets: offsets)
+        saveToCache(playlists: playlists)
+    }
+    
 
     
 }

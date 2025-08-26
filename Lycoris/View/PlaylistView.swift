@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 struct PlaylistView: View {
-    @StateObject var loader = LrcRecordLoader()
     @EnvironmentObject var cacher: LrcRecordCacher
     @State var playlists: [LrcGroup] = []
     @State private var addPlaylist: Bool = false
@@ -28,14 +27,17 @@ struct PlaylistView: View {
                         .padding(.trailing, 17.9)
                         
                     
-                    ForEach(cacher.loadFromCache(), id: \.id) { playlist in
+                ForEach(cacher.loadFromCache(), id: \.id) { playlist in
                         NavigationLink {
                             // Show view for each playlist
+                            
                             PlaylistDetailsView(playlist: playlist)
+                                .environmentObject(LrcRecordCacher())
                         } label: {
                             playlistInfo(Text1: playlist.name, Text2: formatter.string(from: playlist.creationTime))
                         }
                     }
+                    .onDelete(perform: cacher.deletePlaylist)
             }
             
         }
@@ -55,6 +57,8 @@ struct PlaylistView: View {
                         addPlaylist = false
                         newPlaylistName = ""
                     }
+                    .disabled(newPlaylistName.isEmpty)
+                    
                     Button("Cancel", role: .cancel){
                         addPlaylist = false
                         newPlaylistName = ""

@@ -11,22 +11,29 @@ import SwiftUI
 
 
 struct PlaylistDetailsView: View {
-    var playlist: LrcGroup
+    @State var playlist: LrcGroup
+    @EnvironmentObject var cacher: LrcRecordCacher
     
     
     var body: some View {
         NavigationStack{
             List{
-                PlaylistSongs(listContent: playlist.songList)
+                SongListStylingView(listContent: $playlist.songList)
             }
         }
         .navigationTitle("Playlist Details")
+        
+        //onAppear to update the song list. (TBH i dont know how this work - it is not supposed to, but it worked)
+        .onAppear {
+            let cachedPlaylists = cacher.loadFromCache()
+            if let updated = cachedPlaylists.first(where: { $0.id == playlist.id }) {
+                playlist = updated
+            }
+        }
     }
 }
 
 
-struct PlaylistSongs: SongDisplayTemplate {
-    var listContent: [LrcRecord]
-}
+
 
 

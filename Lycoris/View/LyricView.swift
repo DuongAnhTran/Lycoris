@@ -19,6 +19,12 @@ struct LyricView: View {
     @State private var selected: Int? = nil
     @StateObject var lyricsViewModel: LyricsViewModel
     
+    // For the extra sheet when adding song to playl;ist
+    @Environment(\.dismiss) var dismiss
+    
+    
+    @State private var songExist: Bool = false
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .center) {
@@ -85,18 +91,44 @@ struct LyricView: View {
                         
                         Button("Add", role: .destructive) {
                             if selected != nil {
-                                guard playlists.indices.contains(selected!) else { return }
-                                lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
-                                cacher.saveToCache(playlists: playlists)
-                                addSong = false
+                                guard playlists.indices.contains(selected!) else {
+                                    addSong = false
+                                    return
+                                }
+                                if (lyricsViewModel.checkLyricsExist(song: song, playlist: playlists[selected!])) {
+                                    songExist = true
+                                } else {
+                                    songExist = false
+                                    lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
+                                    cacher.saveToCache(playlists: playlists)
+                                    addSong = false
+                                    selected = nil
+                                }
                             }
                         }
                         .disabled(selected == nil)
-                        
+                        .alert("Song already exist, do you still want to add?", isPresented: $songExist) {
+                            Button ("Add", role: .destructive) {
+                                songExist = false
+                                lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
+                                cacher.saveToCache(playlists: playlists)
+                                addSong = false
+                                selected = nil
+                            }
+                            
+                            Button("Cancel", role: .cancel) {
+                                addSong = false
+                                songExist = false
+                            }
+                        }
                         Button("Cancel", role: .cancel) {
-                            addSong = false
+                            
+                            //Currently dismissing the whole view, might need to move the sheet to a new view :sob:
+                            dismiss()
                         }
                     }
+                    
+                    
                 }
             }
         }
@@ -113,18 +145,18 @@ enum LyricOption: String, CaseIterable, Identifiable {
 
 
 
-#Preview {
-    let testSong = LrcRecord(
-        id: 1,
-        trackName: "Placeholder Name",
-        artistName: "Placeholder Artist",
-        albumName: "Placeholder Album",
-        duration: 300.0,
-        instrumental: false,
-        plainLyrics: "Placholder plain lyrics.",
-        syncedLyrics: "[00:00.00] Placeholder Lyrics."
-    )
-    LyricView(song: testSong, lyricsViewModel: LyricsViewModel())
-        .environmentObject(LrcRecordCacher())
-}
+//#Preview {
+//    let testSong = LrcRecord(
+//        id: 1,
+//        trackName: "Placeholder Name",
+//        artistName: "Placeholder Artist",
+//        albumName: "Placeholder Album",
+//        duration: 300.0,
+//        instrumental: false,
+//        plainLyrics: "Placholder plain lyrics.",
+//        syncedLyrics: "[00:00.00] Placeholder Lyrics."
+//    )
+//    LyricView(song: testSong, lyricsViewModel: LyricsViewModel(), refreshID: )
+//        .environmentObject(LrcRecordCacher())
+//}
 

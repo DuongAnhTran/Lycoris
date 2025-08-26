@@ -1,5 +1,5 @@
 //
-//  SognDisplayTemplate.swift
+//  SongListStylingView.swift
 //  Lycoris
 //
 //  Created by Dương Anh Trần on 25/8/2025.
@@ -11,9 +11,9 @@ import Foundation
 import SwiftUI
 
 
-
-struct SongDisplayTemplate: View {
+struct SongListStylingView: View {
     @Binding var listContent: [LrcRecord]
+    
     
     var body: some View {
         ForEach(listContent) { content in

@@ -35,16 +35,16 @@ struct SearchPrimary: View {
                         List {
                             switch selectedCategory {
                             case .all:
-                                songDisplay(listContent: loader.results)
+                                SongListStylingView(listContent: $loader.results)
                                 
                             case .songs:
-                                songDisplay(listContent: loader.resultsSong)
+                                SongListStylingView(listContent: $loader.resultsSong)
                                 
                             case .artists:
-                                songDisplay(listContent: loader.resultsArtist)
+                                SongListStylingView(listContent: $loader.resultsArtist)
                                 
                             case .albums:
-                                songDisplay(listContent: loader.resultsAlbum)
+                                SongListStylingView(listContent: $loader.resultsAlbum)
                                 
                                 
                             }
@@ -139,6 +139,4 @@ struct SearchPrimary: View {
 
 
 
-struct songDisplay: SongDisplayTemplate {
-    var listContent: [LrcRecord]
-}
+
