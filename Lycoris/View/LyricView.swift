@@ -11,7 +11,7 @@ import SwiftUI
 
 struct LyricView: View {
     
-    let song: LrcRecord
+    @State var song: LrcRecord
     //@ObservedObject var loader: LrcRecordLoader
     @State private var options: LyricOption = .showPlainText
     @State private var addSong: Bool = false
@@ -80,52 +80,9 @@ struct LyricView: View {
                         Image(systemName: "plus")
                     }
                     .sheet(isPresented: $addSong) {
-                        var playlists = cacher.loadFromCache()
-                        Picker("Select Playlist", selection: $selected) {
-                            ForEach(playlists.indices, id: \.self) { index in
-                                Text(playlists[index].name)
-                                    .tag(index)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        
-                        Button("Add", role: .destructive) {
-                            if selected != nil {
-                                guard playlists.indices.contains(selected!) else {
-                                    addSong = false
-                                    return
-                                }
-                                if (lyricsViewModel.checkLyricsExist(song: song, playlist: playlists[selected!])) {
-                                    songExist = true
-                                } else {
-                                    songExist = false
-                                    lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
-                                    cacher.saveToCache(playlists: playlists)
-                                    addSong = false
-                                    selected = nil
-                                }
-                            }
-                        }
-                        .disabled(selected == nil)
-                        .alert("Song already exist, do you still want to add?", isPresented: $songExist) {
-                            Button ("Add", role: .destructive) {
-                                songExist = false
-                                lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
-                                cacher.saveToCache(playlists: playlists)
-                                addSong = false
-                                selected = nil
-                            }
-                            
-                            Button("Cancel", role: .cancel) {
-                                addSong = false
-                                songExist = false
-                            }
-                        }
-                        Button("Cancel", role: .cancel) {
-                            
-                            //Currently dismissing the whole view, might need to move the sheet to a new view :sob:
-                            dismiss()
-                        }
+                        //the sheet
+                        SheetView(selected: $selected, addSong: $addSong, lyricsViewModel: lyricsViewModel, song: song, songExist: $songExist)
+                            .environmentObject(LrcRecordCacher())
                     }
                     
                     

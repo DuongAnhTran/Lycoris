@@ -20,6 +20,8 @@ struct PlaylistDetailsView: View {
             List{
                 SongListStylingView(listContent: $playlist.songList)
             }
+            //This is more usable when it is used with search bar.
+            //.refreshable {playlist = cacher.loadFromCache().first(where: {$0.id == playlist.id}) ?? playlist}
         }
         .navigationTitle("Playlist Details")
         
