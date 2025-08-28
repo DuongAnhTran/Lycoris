@@ -13,9 +13,9 @@ import SwiftUI
 class LyricsViewModel: ObservableObject {
     @Published var song: LrcRecord?
     @Published var thePlaylist: LrcGroup?
+    private var cacher = LrcRecordCacher()
     
     func addSongToPlaylist(song: LrcRecord, playlist: inout LrcGroup) {
-        //Need something to stop putting the same song in the same playlist
         playlist.songList.append(song)
     }
     
@@ -31,7 +31,18 @@ class LyricsViewModel: ObservableObject {
     }
     
     
+    func removeSongfromPlaylist(index: Int, playlist: inout LrcGroup, listOfPlaylists: inout [LrcGroup]) {
+        playlist.songList.remove(at: index)
+        updatePlaylist(playlist: playlist, listOfPlaylist: &listOfPlaylists)
+        cacher.saveToCache(playlists: listOfPlaylists)
+    }
     
     
+    func updatePlaylist(playlist: LrcGroup, listOfPlaylist: inout [LrcGroup]) {
+        if let index = listOfPlaylist.firstIndex(where: { $0.id == playlist.id }) {
+            listOfPlaylist[index] = playlist
+        }
+    }
     
+
 }

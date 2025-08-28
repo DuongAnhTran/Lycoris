@@ -35,16 +35,20 @@ struct SearchPrimary: View {
                         List {
                             switch selectedCategory {
                             case .all:
-                                SongListStylingView(listContent: $loader.results)
+                                SongListSearch(listContent: $loader.results)
+                                    
                                 
                             case .songs:
-                                SongListStylingView(listContent: $loader.resultsSong)
+                                SongListSearch(listContent: $loader.resultsSong)
+                                    
                                 
                             case .artists:
-                                SongListStylingView(listContent: $loader.resultsArtist)
+                                SongListSearch(listContent: $loader.resultsArtist)
+                                    
                                 
                             case .albums:
-                                SongListStylingView(listContent: $loader.resultsAlbum)
+                                SongListSearch(listContent: $loader.resultsAlbum)
+                                    
                                 
                                 
                             }

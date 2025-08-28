@@ -49,6 +49,9 @@ struct SheetView: View {
         .disabled(selected == nil)
         .alert("Song already exist, do you still want to add?", isPresented: $songExist) {
             Button ("Add", role: .destructive) {
+                // Ensure that adding is done to a valid song and adding to valid playlist, can force unwrap because validated before
+                print("Adding to playlist ID: \(playlists[selected!].showID())")
+                print("Adding song: \(song.showID())")
                 songExist = false
                 lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
                 cacher.saveToCache(playlists: playlists)

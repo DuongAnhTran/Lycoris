@@ -18,7 +18,7 @@ struct LrcRecord: Codable, Identifiable, ModelTemplate {
     let plainLyrics: String?
     let syncedLyrics: String?
     
-    func showID() {
-        print("\(self.id ?? 0)")
+    func showID() -> Int {
+        return self.id ?? 0
     }
 }

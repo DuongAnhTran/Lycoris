@@ -25,7 +25,7 @@ struct LrcGroup: Codable, Identifiable, ModelTemplate {
     //Remove song will be done directly in the song view
     
     
-    func showID() {
-        print("\(self.id)")
+    func showID() -> UUID {
+        return self.id
     }
 }

@@ -10,9 +10,10 @@ import SwiftUI
 
 struct PlaylistView: View {
     @EnvironmentObject var cacher: LrcRecordCacher
-    @State var playlists: [LrcGroup] = []
+    //@State var playlists: [LrcGroup] = []
     @State private var addPlaylist: Bool = false
     @State private var newPlaylistName: String = ""
+    
     let formatter: DateFormatter = {
         let format = DateFormatter()
         format.dateFormat = "dd-MM-yyyy" // or any format you prefer
@@ -21,6 +22,8 @@ struct PlaylistView: View {
 
     
     var body: some View {
+        
+        var playlists = cacher.loadFromCache()
         NavigationStack {
             List {
                     playlistInfo(Text1: "Playlist", Text2: "Create date", font: .headline)
@@ -31,13 +34,16 @@ struct PlaylistView: View {
                         NavigationLink {
                             // Show view for each playlist
                             
-                            PlaylistDetailsView(playlist: playlist)
+                            PlaylistDetailsView(playlist: playlist, playlistList: playlists)
                                 .environmentObject(LrcRecordCacher())
                         } label: {
                             playlistInfo(Text1: playlist.name, Text2: formatter.string(from: playlist.creationTime))
                         }
                     }
                     .onDelete(perform: cacher.deletePlaylist)
+                    .onAppear {
+                        playlists = cacher.loadFromCache()
+                    }
             }
             
         }

@@ -1,18 +1,19 @@
 //
-//  SongListStylingView.swift
+//  SongListSearch.swift
 //  Lycoris
 //
 //  Created by Dương Anh Trần on 25/8/2025.
 //
 
-
+//Make an entire view
 
 import Foundation
 import SwiftUI
 
 
-struct SongListStylingView: View {
+struct SongListSearch: View {
     @Binding var listContent: [LrcRecord]
+    
     
     
     var body: some View {
@@ -34,6 +35,9 @@ struct SongListStylingView: View {
                 }
             }
         }
+        
+        
+        
     }
 }
 
