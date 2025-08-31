@@ -30,6 +30,7 @@ struct SearchPrimary: View {
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal)
+                    .padding(.bottom, 10)
                     
                     ZStack {
                         List {

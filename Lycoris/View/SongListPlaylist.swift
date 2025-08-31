@@ -12,7 +12,6 @@ import SwiftUI
 
 struct SongListPlaylist: View {
     @ObservedObject var lyricsViewModel: LyricsViewModel
-    //@Binding var listContent: [LrcRecord]
     @Binding var playlist: LrcGroup
     @Binding var playlistList: [LrcGroup]
     @EnvironmentObject var cacher: LrcRecordCacher

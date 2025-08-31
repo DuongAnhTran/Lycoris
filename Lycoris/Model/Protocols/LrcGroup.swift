@@ -28,4 +28,8 @@ struct LrcGroup: Codable, Identifiable, ModelTemplate {
     func showID() -> UUID {
         return self.id
     }
+    
+    func showName() -> String {
+        return self.name
+    }
 }

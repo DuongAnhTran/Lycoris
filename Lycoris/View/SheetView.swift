@@ -21,53 +21,88 @@ struct SheetView: View {
     
     var body: some View {
         var playlists = cacher.loadFromCache()
-        Picker("Select Playlist", selection: $selected) {
-            ForEach(playlists.indices, id: \.self) { index in
-                Text(playlists[index].name)
-                    .tag(index)
-            }
-        }
-        .pickerStyle(.menu)
+        let screen = UIScreen.main.bounds
         
-        Button("Add", role: .destructive) {
-            if selected != nil {
-                guard playlists.indices.contains(selected!) else {
-                    addSong = false
-                    return
+        
+        
+        VStack {
+            
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: screen.width * 0.9, height: 70)
+                
+                HStack(spacing: 10) {
+                    Text("Select Playlist")
+                    
+                    Picker("Selection", selection: $selected) {
+                        Text("None").tag(nil as Int?)
+                        ForEach(playlists.indices, id: \.self) { index in
+                            Text(playlists[index].name)
+                                .tag(Optional(index))
+                        }
+                    }
                 }
-                if (lyricsViewModel.checkLyricsExist(song: song, playlist: playlists[selected!])) {
-                    songExist = true
-                } else {
+                .pickerStyle(.menu)
+                .frame(width: screen.width * 0.8, height: 50)
+                .background(Color.white)
+            }
+            
+            
+        
+            Button("Add", role: .destructive) {
+                if selected != nil {
+                    guard playlists.indices.contains(selected!) else {
+                        addSong = false
+                        return
+                    }
+                    if (lyricsViewModel.checkLyricsExist(song: song, playlist: playlists[selected!])) {
+                        songExist = true
+                    } else {
+                        songExist = false
+                        lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
+                        cacher.saveToCache(playlists: playlists)
+                        addSong = false
+                        selected = nil
+                    }
+                }
+            }
+            .font(.headline)
+            .padding()
+            .padding(.bottom, 10)
+            .frame(width: screen.width * 0.4)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .disabled(selected == nil)
+            .alert("Song already exist, do you still want to add?", isPresented: $songExist) {
+                Button ("Add", role: .destructive) {
+                    // Ensure that adding is done to a valid song and adding to valid playlist, can force unwrap because validated before
+                    print("Adding to playlist ID: \(playlists[selected!].showID())")
+                    print("Adding song: \(song.showID())")
                     songExist = false
                     lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
                     cacher.saveToCache(playlists: playlists)
                     addSong = false
                     selected = nil
                 }
+                
+                Button("Cancel", role: .cancel) {
+                    addSong = false
+                    songExist = false
+                }
             }
-        }
-        .disabled(selected == nil)
-        .alert("Song already exist, do you still want to add?", isPresented: $songExist) {
-            Button ("Add", role: .destructive) {
-                // Ensure that adding is done to a valid song and adding to valid playlist, can force unwrap because validated before
-                print("Adding to playlist ID: \(playlists[selected!].showID())")
-                print("Adding song: \(song.showID())")
-                songExist = false
-                lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
-                cacher.saveToCache(playlists: playlists)
-                addSong = false
-                selected = nil
-            }
-            
             Button("Cancel", role: .cancel) {
-                addSong = false
-                songExist = false
+                selected = nil
+                dismiss()
             }
-        }
-        Button("Cancel", role: .cancel) {
+            .font(.headline)
+            .padding()
+            .frame(width: screen.width * 0.4)
+            .background(Color.red)
+            .foregroundColor(.white)
+            .cornerRadius(10)
             
-            
-            dismiss()
         }
     }
 }

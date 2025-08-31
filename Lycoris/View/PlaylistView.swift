@@ -56,6 +56,7 @@ struct PlaylistView: View {
                 }) {
                     Image(systemName: "plus")
                 }
+                // An extra view made by alert (for lightweight and clean display) for playlist name
                 .alert("Notification", isPresented: $addPlaylist) {
                     TextField("Name for playlist", text: $newPlaylistName)
                     Button("Add", role: .destructive) {

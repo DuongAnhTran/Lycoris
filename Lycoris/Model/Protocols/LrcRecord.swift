@@ -21,4 +21,9 @@ struct LrcRecord: Codable, Identifiable, ModelTemplate {
     func showID() -> Int {
         return self.id ?? 0
     }
+    
+    func showName() -> String {
+        return self.trackName ?? "Track name not available"
+    }
+    
 }

@@ -14,5 +14,10 @@ import Foundation
 
 protocol ModelTemplate {
     associatedtype IDType
+    associatedtype NameType
+    
+    //The funtionn for this protocol is mainly to perform debugging during the app/observing the process of the app
     func showID() -> IDType
+    
+    func showName() -> NameType
 }

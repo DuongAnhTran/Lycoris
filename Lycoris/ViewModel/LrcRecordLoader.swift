@@ -6,6 +6,12 @@
 //
 
 
+
+/**
+    A 
+ */
+
+
 import Foundation
 
 
@@ -25,10 +31,9 @@ class LrcRecordLoader: ObservableObject {
     
     
     
+    
     func fetchResults(query: String) async {
         results.removeAll()
-        
-        
         if query == "" {
             self.results = []
             return
@@ -66,7 +71,6 @@ class LrcRecordLoader: ObservableObject {
     
     func fetchResultsSong(query: String) async {
         resultsSong.removeAll()
-        
         
         if query == "" {
             self.resultsSong = []
