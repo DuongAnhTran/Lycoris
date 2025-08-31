@@ -18,6 +18,8 @@ struct LrcRecord: Codable, Identifiable, ModelTemplate {
     let plainLyrics: String?
     let syncedLyrics: String?
     
+    
+    // Functions to show the ID and the Name of the song (for debugging)
     func showID() -> Int {
         return self.id ?? 0
     }

@@ -16,7 +16,7 @@ struct PlaylistView: View {
     
     let formatter: DateFormatter = {
         let format = DateFormatter()
-        format.dateFormat = "dd-MM-yyyy" // or any format you prefer
+        format.dateFormat = "dd-MM-yyyy"
         return format
     }()
 
@@ -33,7 +33,6 @@ struct PlaylistView: View {
                 ForEach(cacher.loadFromCache(), id: \.id) { playlist in
                         NavigationLink {
                             // Show view for each playlist
-                            
                             PlaylistDetailsView(playlist: playlist, playlistList: playlists)
                                 .environmentObject(LrcRecordCacher())
                         } label: {

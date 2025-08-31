@@ -9,17 +9,18 @@ import Foundation
 import SwiftUI
 
 
+
+// This view show thew actual song information and the lyric of that song
 struct LyricView: View {
     
     @State var song: LrcRecord
-    //@ObservedObject var loader: LrcRecordLoader
     @State private var options: LyricOption = .showPlainText
     @State private var addSong: Bool = false
     @EnvironmentObject var cacher: LrcRecordCacher
     @State private var selected: Int? = nil
     @StateObject var lyricsViewModel: LyricsViewModel
     
-    // For the extra sheet when adding song to playl;ist
+    // For dismissing the extra sheet when adding song to playlist
     @Environment(\.dismiss) var dismiss
     
     

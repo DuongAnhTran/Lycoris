@@ -25,7 +25,8 @@ class LyricsViewModel: ObservableObject {
         playlist.songList.append(song)
     }
     
-    // Check if the chosen song/lyric already existed
+    
+    // Check if the chosen song/lyric already existed in the playlist
     func checkLyricsExist(song: LrcRecord, playlist: LrcGroup) -> Bool {
         for eachSong in playlist.songList {
             if song.id == eachSong.id  {

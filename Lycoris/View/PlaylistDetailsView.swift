@@ -9,27 +9,46 @@ import Foundation
 import SwiftUI
 
 
-
+// The view that show the detail of the chosen playlist
 struct PlaylistDetailsView: View {
     @State var playlist: LrcGroup
     @EnvironmentObject var cacher: LrcRecordCacher
     @State var playlistList: [LrcGroup]
     
+    // Declaring date format
+    let formatter: DateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "dd-MM-yyyy"
+        return format
+    }()
+    
     var body: some View {
         NavigationStack{
-            List{
-                SongListPlaylist(lyricsViewModel: LyricsViewModel(), playlist: $playlist, playlistList: $playlistList)
-                    .environmentObject(LrcRecordCacher())
+            VStack(spacing: 10) {
+                Text("Playlist: \(playlist.showName())")
+                    .font(.title2)
+                
+                Text("Songs: \(playlist.songList.count)")
+                    .font(.title2)
+                
+                Text("Create Date: \(formatter.string(from: playlist.creationTime))")
+                    .font(.title2)
+                
+                List{
+                    SongListPlaylist(lyricsViewModel: LyricsViewModel(), playlist: $playlist, playlistList: $playlistList)
+                        .environmentObject(LrcRecordCacher())
+                }
             }
-            //This is more usable when it is used with search bar.
-            //.refreshable {playlist = cacher.loadFromCache().first(where: {$0.id == playlist.id}) ?? playlist}
+            
         }
         .navigationTitle("Playlist Details")
         
-        //onAppear to update the song list. (TBH i dont know how this work - it is not supposed to, but it worked)
+        //onAppear to manually update the song list everytime it show up
         .onAppear {
             // Checking the current playlist (debug) and perform reloading playlist's detail
-            print("Current playlist's ID: \(playlist.showID())")
+            print("Current playlist: \(playlist.showID()), \(playlist.showName())")
+            
+            // Reassign data when the view is showed to ensure the data is updated
             let cachedPlaylists = cacher.loadFromCache()
             playlistList = cacher.loadFromCache()
             if let updated = cachedPlaylists.first(where: { $0.id == playlist.id }) {

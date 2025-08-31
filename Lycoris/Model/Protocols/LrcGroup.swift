@@ -13,21 +13,16 @@ struct LrcGroup: Codable, Identifiable, ModelTemplate {
     var songList: [LrcRecord] = []
     var creationTime: Date
     
-    mutating func addSongtoPlaylist(_ song: LrcRecord) {
-        self.songList.append(song)
-    }
-    
     
     mutating func clearSongs() {
         self.songList.removeAll()
     }
     
-    //Remove song will be done directly in the song view
-    
-    
+    // Functions to show the ID and the name of the playlist (for debugging)
     func showID() -> UUID {
         return self.id
     }
+    
     
     func showName() -> String {
         return self.name

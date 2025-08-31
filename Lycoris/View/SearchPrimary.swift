@@ -49,12 +49,18 @@ struct SearchPrimary: View {
                                 
                             case .albums:
                                 SongListSearch(listContent: $loader.resultsAlbum)
-                                    
-                                
-                                
                             }
                         }
+                        //Search bar setting for the result list
                         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: (.always)), prompt: "Search")
+                        
+                        /**
+                            When submit the query on the search bar (by clicking `Enter`):
+                                - Set the loading state to true
+                                - Fetch results from API by searching using `general query - q` and `track name` (API restriction)
+                                - Get all the information and sort it out for album and artist results
+                                - When done reset the loading state
+                         */
                         .onSubmit(of: .search) {
                             Task {
                                 loader.loading = true
@@ -63,7 +69,6 @@ struct SearchPrimary: View {
                                 loader.fetchResultAlbum(results: loader.results, query: query)
                                 loader.fetchResultArtist(results: loader.results, query: query)
                                 loader.loading = false
-                                //print(loader.results)
                             }
                         }
                         
@@ -76,10 +81,12 @@ struct SearchPrimary: View {
                                 Image(systemName: "magnifyingglass.circle.fill")
                                     .symbolEffect(.bounce.up.wholeSymbol, options:  .repeat(.periodic(delay: 2.0)))
                             }
+                        // Show the notification if there is no result can be found for any of the tab
                         } else if (loader.found == false){
                             Text("No result found. Please search again :<")
                                 .font(.headline)
                         } else {
+                            // Four different views for 4 different tabs of results
                             switch selectedCategory {
                             case .all:
                                 Text("")
@@ -107,8 +114,8 @@ struct SearchPrimary: View {
                             }
                         }
                     }
-                    //SecondaryView()
                     
+                // Activate progressing view everytime query is submitted.
                 } else {
                     ProgressView("Fetching your lyrics. Please wait a moment.")
                         .progressViewStyle(CircularProgressViewStyle())
