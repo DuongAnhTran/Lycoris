@@ -14,7 +14,11 @@
 import Foundation
 import SwiftUI
 
-class LyricsViewModel: ObservableObject {
+class LyricsViewModel: ObservableObject, ModelSavingTemplate {
+    typealias Input = LrcGroup
+    
+    typealias Output = [LrcRecord]
+    
     private var cacher = LrcRecordCacher()
     
     /*
@@ -57,4 +61,14 @@ class LyricsViewModel: ObservableObject {
     }
     
 
+    
+    func filter(input: LrcGroup, searchText: String) -> [LrcRecord] {
+        var filteredSongs: [LrcRecord] = []
+        for song in input.songList {
+            if (song.trackName?.lowercased().contains(searchText.lowercased()) ?? false) == true {
+                filteredSongs.append(song)
+            }
+        }
+        return filteredSongs
+    }
 }

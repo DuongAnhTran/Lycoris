@@ -122,7 +122,7 @@ struct SearchPrimary: View {
                 }
             }
             // Title of the view + the rest button for restting search results
-            .navigationTitle("Search Lyrics")
+            .navigationTitle("Search")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing){
                     // The reset button

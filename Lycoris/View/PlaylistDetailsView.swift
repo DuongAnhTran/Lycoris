@@ -14,6 +14,7 @@ struct PlaylistDetailsView: View {
     @State var playlist: LrcGroup
     @EnvironmentObject var cacher: LrcRecordCacher
     @State var playlistList: [LrcGroup]
+    @State var empty: Bool = false
     
     // Declaring date format
     let formatter: DateFormatter = {

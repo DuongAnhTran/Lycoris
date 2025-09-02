@@ -7,7 +7,11 @@
 
 import Foundation
 
-class LrcRecordCacher: ObservableObject {
+class LrcRecordCacher: ObservableObject, ModelSavingTemplate {
+    typealias Input = [LrcGroup]
+    
+    typealias Output = [LrcGroup]
+    
     @Published var playlists: [LrcGroup] = []
     
     func saveToCache (playlists: [LrcGroup]) {
@@ -44,5 +48,14 @@ class LrcRecordCacher: ObservableObject {
     }
     
 
+    func filter(input: [LrcGroup], searchText: String) -> [LrcGroup] {
+        var filteredPlaylists: [LrcGroup] = []
+        for playlist in input {
+            if (playlist.name.lowercased().contains(searchText.lowercased())) == true {
+                filteredPlaylists.append(playlist)
+            }
+        }
+        return filteredPlaylists
+    }
     
 }
