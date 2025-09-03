@@ -6,7 +6,7 @@
 //
 
 
-
+// A protocol/template for view model that responsible for saving playlists and songs
 import Foundation
 
 protocol ModelSavingTemplate {

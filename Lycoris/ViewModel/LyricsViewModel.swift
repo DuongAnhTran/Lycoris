@@ -19,7 +19,7 @@ class LyricsViewModel: ObservableObject, ModelSavingTemplate {
     
     typealias Output = [LrcRecord]
     
-    private var cacher = LrcRecordCacher()
+    private var cacher = PlaylistViewModel()
     
     /*
         Add function was done through accessing list of playlists' indexes directly (through Picker). Therefore

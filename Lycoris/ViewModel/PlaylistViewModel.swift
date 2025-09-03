@@ -1,5 +1,5 @@
 //
-//  LrcRecordCacher.swift
+//  PlaylistViewModel.swift
 //  Lycoris
 //
 //  Created by Dương Anh Trần on 25/8/2025.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class LrcRecordCacher: ObservableObject, ModelSavingTemplate {
+class PlaylistViewModel: ObservableObject, ModelSavingTemplate {
     typealias Input = [LrcGroup]
     
     typealias Output = [LrcGroup]

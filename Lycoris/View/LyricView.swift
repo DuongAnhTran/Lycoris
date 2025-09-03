@@ -16,7 +16,7 @@ struct LyricView: View {
     @State var song: LrcRecord
     @State private var options: LyricOption = .showPlainText
     @State private var addSong: Bool = false
-    @EnvironmentObject var cacher: LrcRecordCacher
+    @EnvironmentObject var cacher: PlaylistViewModel
     @State private var selected: Int? = nil
     @StateObject var lyricsViewModel: LyricsViewModel
     
@@ -83,7 +83,7 @@ struct LyricView: View {
                     .sheet(isPresented: $addSong) {
                         //the sheet
                         SheetView(selected: $selected, addSong: $addSong, lyricsViewModel: lyricsViewModel, song: song, songExist: $songExist)
-                            .environmentObject(LrcRecordCacher())
+                            .environmentObject(PlaylistViewModel())
                     }
                     
                     
@@ -115,6 +115,6 @@ enum LyricOption: String, CaseIterable, Identifiable {
 //        syncedLyrics: "[00:00.00] Placeholder Lyrics."
 //    )
 //    LyricView(song: testSong, lyricsViewModel: LyricsViewModel(), refreshID: )
-//        .environmentObject(LrcRecordCacher())
+//        .environmentObject(PlaylistViewModel())
 //}
 

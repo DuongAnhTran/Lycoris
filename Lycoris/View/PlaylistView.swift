@@ -9,10 +9,12 @@ import Foundation
 import SwiftUI
 
 struct PlaylistView: View {
-    @EnvironmentObject var cacher: LrcRecordCacher
+    @EnvironmentObject var cacher: PlaylistViewModel
     //@State var playlists: [LrcGroup] = []
     @State private var addPlaylist: Bool = false
     @State private var newPlaylistName: String = ""
+    @State private var searchString: String = ""
+    
     
     let formatter: DateFormatter = {
         let format = DateFormatter()
@@ -24,17 +26,26 @@ struct PlaylistView: View {
     var body: some View {
         
         var playlists = cacher.loadFromCache()
+        
+        var filteredPlaylist: [LrcGroup] {
+            if searchString.isEmpty {
+                return playlists
+            } else {
+                return cacher.filter(input: playlists, searchText: searchString)
+            }
+        }
+        
         NavigationStack {
             List {
                     playlistInfo(Text1: "Playlist", Text2: "Create date", font: .headline)
                         .padding(.trailing, 17.9)
                         
                     
-                ForEach(cacher.loadFromCache(), id: \.id) { playlist in
+                ForEach(filteredPlaylist, id: \.id) { playlist in
                         NavigationLink {
                             // Show view for each playlist
                             PlaylistDetailsView(playlist: playlist, playlistList: playlists)
-                                .environmentObject(LrcRecordCacher())
+                                .environmentObject(PlaylistViewModel())
                         } label: {
                             playlistInfo(Text1: playlist.name, Text2: formatter.string(from: playlist.creationTime))
                         }
@@ -44,6 +55,7 @@ struct PlaylistView: View {
                         playlists = cacher.loadFromCache()
                     }
             }
+            .searchable(text: $searchString, prompt: "Search for playlist")
             
         }
         .navigationTitle("Playlists")
@@ -90,5 +102,5 @@ struct playlistInfo: TwoColumnList {
 
 #Preview {
     PlaylistView()
-        .environmentObject(LrcRecordCacher())
+        .environmentObject(PlaylistViewModel())
 }

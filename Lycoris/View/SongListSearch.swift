@@ -20,7 +20,7 @@ struct SongListSearch: View {
         ForEach(listContent) { content in
             NavigationLink {
                 LyricView(song: content, lyricsViewModel: LyricsViewModel())
-                    .environmentObject(LrcRecordCacher())
+                    .environmentObject(PlaylistViewModel())
             } label: {
                 VStack(alignment: .leading, spacing: 10){
                     Text("\(content.trackName ?? "None")")

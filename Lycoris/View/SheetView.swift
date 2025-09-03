@@ -11,7 +11,7 @@ import SwiftUI
 struct SheetView: View {
     
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var cacher: LrcRecordCacher
+    @EnvironmentObject var cacher: PlaylistViewModel
     @Binding var selected: Int?
     @Binding var addSong: Bool
     @ObservedObject var lyricsViewModel: LyricsViewModel
@@ -32,9 +32,8 @@ struct SheetView: View {
                     .fill(Color.gray.opacity(0.2))
                     .frame(width: screen.width * 0.9, height: 70)
                 
-                HStack(spacing: 10) {
-                    Text("Select Playlist")
-                    
+
+                Form {
                     Picker("Selection", selection: $selected) {
                         Text("None").tag(nil as Int?)
                         ForEach(playlists.indices, id: \.self) { index in
@@ -42,10 +41,14 @@ struct SheetView: View {
                                 .tag(Optional(index))
                         }
                     }
+                    .pickerStyle(.menu)
+                    .accentColor(.gray)
+                    .frame(width: screen.width * 0.8, height: 50)
+                    .background(Color.white)
                 }
-                .pickerStyle(.menu)
-                .frame(width: screen.width * 0.8, height: 50)
-                .background(Color.white)
+                .frame(height: 140)
+
+                
             }
             
             
@@ -69,9 +72,8 @@ struct SheetView: View {
             }
             .font(.headline)
             .padding()
-            .padding(.bottom, 10)
             .frame(width: screen.width * 0.4)
-            .background(Color.blue)
+            .background((selected == nil) ? Color.gray : Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
             .disabled(selected == nil)

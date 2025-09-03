@@ -12,7 +12,7 @@ import SwiftUI
 // The view that show the detail of the chosen playlist
 struct PlaylistDetailsView: View {
     @State var playlist: LrcGroup
-    @EnvironmentObject var cacher: LrcRecordCacher
+    @EnvironmentObject var cacher: PlaylistViewModel
     @State var playlistList: [LrcGroup]
     @State var empty: Bool = false
     
@@ -35,10 +35,10 @@ struct PlaylistDetailsView: View {
                 Text("Create Date: \(formatter.string(from: playlist.creationTime))")
                     .font(.title2)
                 
-                List{
-                    SongListPlaylist(lyricsViewModel: LyricsViewModel(), playlist: $playlist, playlistList: $playlistList)
-                        .environmentObject(LrcRecordCacher())
-                }
+                //List{
+                SongListPlaylist(lyricsViewModel: LyricsViewModel(), playlist: $playlist, playlistList: $playlistList)
+                    .environmentObject(PlaylistViewModel())
+                //}
             }
             
         }

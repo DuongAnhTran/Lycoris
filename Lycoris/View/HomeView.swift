@@ -38,7 +38,7 @@ struct HomeView: View {
                 }
                 
                 // Go to the list of playlists
-                NavigationLink(destination: PlaylistView().environmentObject(LrcRecordCacher())) {
+                NavigationLink(destination: PlaylistView().environmentObject(PlaylistViewModel())) {
                     Text("Your Playlist")
                         .font(.title)
                         .frame(width: 180, height: 80)
