@@ -12,21 +12,24 @@ import SwiftUI
 
 struct HomeView: View {
     
+    // A variable to ensure check for the current color theme of the device (light/dark)
     @Environment(\.colorScheme) var colorScheme
-
     var darkMode: Bool {
         colorScheme == .dark
     }
     
     var body: some View {
         NavigationStack{
-            VStack{
+            VStack {
+                Spacer()
                 Text("Lycoris")
                     .frame(alignment: .top)
                     .font(.largeTitle)
-                
-                Spacer()
-                // Go straight to searching lyric
+                    
+
+                Image(darkMode ? "logo-walter" : "logo")
+                    .padding(.bottom, 20)
+                // Go to searching lyric view
                 NavigationLink(destination: SearchView()) {
                     Text("Get Started")
                         .font(.title)
@@ -36,6 +39,7 @@ struct HomeView: View {
                             .fill(darkMode ? .white : .black))
                         .foregroundColor(darkMode ? .black : .white)
                 }
+                .padding(.bottom, 20)
                 
                 // Go to the list of playlists
                 NavigationLink(destination: PlaylistView().environmentObject(PlaylistViewModel())) {

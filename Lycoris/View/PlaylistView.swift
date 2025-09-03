@@ -8,14 +8,16 @@
 import Foundation
 import SwiftUI
 
+/**
+    The view that shows the list of playlists
+ */
 struct PlaylistView: View {
     @EnvironmentObject var cacher: PlaylistViewModel
-    //@State var playlists: [LrcGroup] = []
     @State private var addPlaylist: Bool = false
     @State private var newPlaylistName: String = ""
     @State private var searchString: String = ""
     
-    
+    // Formatting the date
     let formatter: DateFormatter = {
         let format = DateFormatter()
         format.dateFormat = "dd-MM-yyyy"
@@ -25,8 +27,14 @@ struct PlaylistView: View {
     
     var body: some View {
         
+        // Get the current information of the playlists saved
         var playlists = cacher.loadFromCache()
         
+        /*
+            Defining a variable that will hold the filtered result.
+            - If the search string is currently empty, just return all playlists
+            - If search string change, filter out playlists that has name containing the search string
+         */
         var filteredPlaylist: [LrcGroup] {
             if searchString.isEmpty {
                 return playlists
@@ -35,26 +43,33 @@ struct PlaylistView: View {
             }
         }
         
+        // The actual UI element to show the list of songs.
         NavigationStack {
             List {
-                    playlistInfo(Text1: "Playlist", Text2: "Create date", font: .headline)
-                        .padding(.trailing, 17.9)
+                // Showing the custom view that conforms to the two column list template to show the Heading for the list
+                playlistInfo(Text1: "Playlist", Text2: "Create date", font: .headline)
+                    .padding(.trailing, 17.9)
                         
-                    
+                // Show the actual list of playlists using the custom view, while each
                 ForEach(filteredPlaylist, id: \.id) { playlist in
                         NavigationLink {
-                            // Show view for each playlist
+                            // Show view for each playlist (Go top the playlist detail view)
                             PlaylistDetailsView(playlist: playlist, playlistList: playlists)
                                 .environmentObject(PlaylistViewModel())
                         } label: {
+                            // Showing the label using the view that conforms to the custom list
                             playlistInfo(Text1: playlist.name, Text2: formatter.string(from: playlist.creationTime))
                         }
                     }
+                    // Allowing deletion to be done by swipping the list item
                     .onDelete(perform: cacher.deletePlaylist)
+                    
+                    // As soon as the view load up, populate the list of playlist with data saved data
                     .onAppear {
                         playlists = cacher.loadFromCache()
                     }
             }
+            //
             .searchable(text: $searchString, prompt: "Search for playlist")
             
         }

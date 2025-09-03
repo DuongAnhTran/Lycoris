@@ -9,6 +9,14 @@
 import Foundation
 import SwiftUI
 
+/**
+    An extra view that shows the list of songs in the chosen playlist.
+        - The view takes in a copy of `lyricViewModel` to conduct song assertion and deletion (mainly deletion) directly in the list
+        - Contains bindings of the chosen playlist and the actual list of playlists since any changes in the list of songs in a playlist
+            also changes the lists of playlists that is getting cached into UserDefaults
+        - The view also takes in the environment object PlaylistViewModel to perform caching data into UserDefaults (UserDefaults only
+            cache the list of playlists)
+ */
 
 struct SongListPlaylist: View {
     @ObservedObject var lyricsViewModel: LyricsViewModel
@@ -16,8 +24,12 @@ struct SongListPlaylist: View {
     @Binding var playlistList: [LrcGroup]
     @EnvironmentObject var cacher: PlaylistViewModel
     
+    // A variable to observe user input and filter the songs in the playlist (for better access)
     @State var searchText = ""
     
+    // A varible that will be storing the list of songs that will be shown based on the search text
+    // Contain all of the playlist's song if the search query is none
+    // Only contain songs related on then search query (song name)
     var filteredSong: [LrcRecord] {
         if searchText.isEmpty {
             return playlist.songList
@@ -29,7 +41,7 @@ struct SongListPlaylist: View {
     var body: some View {
         if !filteredSong.isEmpty {
             List {
-                ForEach(Array(filteredSong.enumerated()), id: \.offset) { index, content in         //Note: playlist.songList
+                ForEach(Array(filteredSong.enumerated()), id: \.offset) { index, content in
                     NavigationLink {
                         LyricView(song: content, lyricsViewModel: LyricsViewModel())
                             .environmentObject(PlaylistViewModel())
@@ -56,7 +68,7 @@ struct SongListPlaylist: View {
                     }
                 }
             }
-            .searchable(text: $searchText, prompt: "Search Songs in Playlist")
+            .searchable(text: $searchText, prompt: "Search Songs in Playlist (by Name)")
             
         } else {
             // What will show in the song list if there is no songs

@@ -8,6 +8,14 @@
 
 import Foundation
 
+/**
+    The model created for a song, this model include:
+        - ID, track name, artist name, album name
+        - Duration of the song
+        - If the song is instrumental
+        - The plain and synced lyric for the song
+ */
+
 struct LrcRecord: Codable, Identifiable, ModelTemplate {
     let id: Int?
     let trackName: String?

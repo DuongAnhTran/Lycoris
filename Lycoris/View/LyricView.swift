@@ -20,16 +20,20 @@ struct LyricView: View {
     @State private var selected: Int? = nil
     @StateObject var lyricsViewModel: LyricsViewModel
     
+    
+    @State private var songExist: Bool = false
+    
     // For dismissing the extra sheet when adding song to playlist
     @Environment(\.dismiss) var dismiss
     
     
-    @State private var songExist: Bool = false
-    
     var body: some View {
+        // The actual view that will show the song detail and the lyrics
         ScrollView {
             VStack(alignment: .center) {
                 VStack {
+                    
+                    // The information of the song:
                     Text("\(song.trackName ?? "No Name")")
                         .font(.title2)
                         .padding()
@@ -50,6 +54,7 @@ struct LyricView: View {
                         .padding(.leading, 10)
                 }
                 
+                // The side picker to choose and change between plain and synced lyric
                 Picker("Category", selection: $options) {
                     ForEach(LyricOption.allCases) { option in
                         Text(option.rawValue).tag(option)
@@ -75,13 +80,14 @@ struct LyricView: View {
             .navigationTitle("Song Information")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    // The plus button on the top right to add song
                     Button(action: {
                         addSong = true
                     }) {
                         Image(systemName: "plus")
                     }
                     .sheet(isPresented: $addSong) {
-                        //the sheet
+                        // Open an extra sheet that will ask user which playlist to add the song to
                         SheetView(selected: $selected, addSong: $addSong, lyricsViewModel: lyricsViewModel, song: song, songExist: $songExist)
                             .environmentObject(PlaylistViewModel())
                     }
@@ -99,22 +105,4 @@ enum LyricOption: String, CaseIterable, Identifiable {
     case showPlainText = "Show Plain Text"
     case showSyncedText = "Show Synced Text"
 }
-
-
-
-
-//#Preview {
-//    let testSong = LrcRecord(
-//        id: 1,
-//        trackName: "Placeholder Name",
-//        artistName: "Placeholder Artist",
-//        albumName: "Placeholder Album",
-//        duration: 300.0,
-//        instrumental: false,
-//        plainLyrics: "Placholder plain lyrics.",
-//        syncedLyrics: "[00:00.00] Placeholder Lyrics."
-//    )
-//    LyricView(song: testSong, lyricsViewModel: LyricsViewModel(), refreshID: )
-//        .environmentObject(PlaylistViewModel())
-//}
 

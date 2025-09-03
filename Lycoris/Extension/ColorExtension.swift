@@ -10,7 +10,7 @@ import SwiftUICore
 
 /**
     - An extension for SwiftUI's `Color` attribute
-    - This extension allows hexidecimal color code to be used in the program
+    - This extension allows hexidecimal color code to be used in the program for better color choice
  **/
 
 extension Color {

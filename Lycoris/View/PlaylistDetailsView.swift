@@ -26,6 +26,7 @@ struct PlaylistDetailsView: View {
     var body: some View {
         NavigationStack{
             VStack(spacing: 10) {
+                //The three text showing information of the chosen playlist
                 Text("Playlist: \(playlist.showName())")
                     .font(.title2)
                 
@@ -35,7 +36,7 @@ struct PlaylistDetailsView: View {
                 Text("Create Date: \(formatter.string(from: playlist.creationTime))")
                     .font(.title2)
                 
-
+                // Showing the list of song in this playlist
                 SongListPlaylist(lyricsViewModel: LyricsViewModel(), playlist: $playlist, playlistList: $playlistList)
                     .environmentObject(PlaylistViewModel())
 
@@ -49,7 +50,11 @@ struct PlaylistDetailsView: View {
             // Checking the current playlist (debug) and perform reloading playlist's detail
             print("Current playlist: \(playlist.showID()), \(playlist.showName())")
             
-            // Reassign data when the view is showed to ensure the data is updated
+            /**
+                Reassign data when the view is showed to ensure the data is updated:
+                    - Update the playlist with the updated version as soon as it appears by reassigning
+                        values for playlist and list of playlists
+             */
             let cachedPlaylists = cacher.loadFromCache()
             playlistList = cacher.loadFromCache()
             if let updated = cachedPlaylists.first(where: { $0.id == playlist.id }) {
