@@ -19,6 +19,13 @@ struct SheetView: View {
     @Binding var songExist: Bool
     
     
+    @Environment(\.colorScheme) var colorScheme
+
+    var darkMode: Bool {
+        colorScheme == .dark
+    }
+    
+    
     var body: some View {
         var playlists = cacher.loadFromCache()
         let screen = UIScreen.main.bounds
@@ -34,25 +41,27 @@ struct SheetView: View {
                 
 
                 Form {
-                    Picker("Selection", selection: $selected) {
-                        Text("None").tag(nil as Int?)
-                        ForEach(playlists.indices, id: \.self) { index in
-                            Text(playlists[index].name)
-                                .tag(Optional(index))
+                        Picker("Selection", selection: $selected) {
+                            Text("None").tag(nil as Int?)
+                            ForEach(playlists.indices, id: \.self) { index in
+                                Text(playlists[index].name)
+                                    .tag(Optional(index))
+                            }
                         }
-                    }
-                    .pickerStyle(.menu)
-                    .accentColor(.gray)
-                    .frame(width: screen.width * 0.8, height: 50)
-                    .background(Color.white)
+                        .pickerStyle(.menu)
+                        .accentColor(darkMode ? Color.gray : Color(hex: 0x696969))
+                        .frame(width: screen.width * 0.8, height: 50)
+                        .listRowBackground(darkMode ? Color.gray : Color(hex: 0xFAFAFA))
                 }
                 .frame(height: 140)
+                .scrollDisabled(true)
+                .scrollContentBackground(.hidden)
 
                 
             }
-            
-            
-        
+
+
+
             Button("Add", role: .destructive) {
                 if selected != nil {
                     guard playlists.indices.contains(selected!) else {
