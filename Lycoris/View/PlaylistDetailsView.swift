@@ -35,10 +35,10 @@ struct PlaylistDetailsView: View {
                 Text("Create Date: \(formatter.string(from: playlist.creationTime))")
                     .font(.title2)
                 
-                //List{
+
                 SongListPlaylist(lyricsViewModel: LyricsViewModel(), playlist: $playlist, playlistList: $playlistList)
                     .environmentObject(PlaylistViewModel())
-                //}
+
             }
             
         }

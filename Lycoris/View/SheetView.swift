@@ -49,7 +49,7 @@ struct SheetView: View {
                             }
                         }
                         .pickerStyle(.menu)
-                        .accentColor(darkMode ? Color.gray : Color(hex: 0x696969))
+                        .accentColor(darkMode ? Color.white : Color(hex: 0x696969))
                         .frame(width: screen.width * 0.8, height: 50)
                         .listRowBackground(darkMode ? Color.gray : Color(hex: 0xFAFAFA))
                 }

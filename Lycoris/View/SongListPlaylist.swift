@@ -65,12 +65,19 @@ struct SongListPlaylist: View {
             Text("There is no song in this playlist right now. Go back to home screen to add songs!")
                 .bold()
                 .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
             
             NavigationLink(destination: HomeView()) {
                 Text("Home")
                     .frame(alignment: .center)
-                    .foregroundStyle(Color.blue)
+                    .foregroundStyle(Color.white)
             }
+            .frame(width: 150, height: 50)
+            .cornerRadius(10)
+            .background(RoundedRectangle(cornerRadius: 10)
+                .fill(.blue))
+
+
             Spacer ()
         }
         
