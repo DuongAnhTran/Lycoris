@@ -88,7 +88,7 @@ struct LyricView: View {
                     }
                     .sheet(isPresented: $addSong) {
                         // Open an extra sheet that will ask user which playlist to add the song to
-                        SheetView(selected: $selected, addSong: $addSong, lyricsViewModel: lyricsViewModel, song: song, songExist: $songExist)
+                        SheetView(selected: $selected, addSong: $addSong, songExist: $songExist, lyricsViewModel: lyricsViewModel, song: song)
                             .environmentObject(PlaylistsViewModel())
                     }
                     
