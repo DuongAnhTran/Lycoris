@@ -27,8 +27,9 @@ struct PlaylistDetailsView: View {
         NavigationStack{
             VStack(spacing: 10) {
                 //The three text showing information of the chosen playlist
-                Text("Playlist: \(playlist.showName())")
-                    .font(.title2)
+                Text("\(playlist.showName())")
+                    .font(.title)
+                    .bold()
                 
                 Text("Songs: \(playlist.songList.count)")
                     .font(.title2)

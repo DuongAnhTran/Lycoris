@@ -74,13 +74,13 @@ struct SongListPlaylist: View {
             // What will show in the song list if there is no songs (Notification and a button to go SearchView to add in song)
             Spacer()
             
-            Text("There is no song in this playlist right now. Go back to home screen to add songs!")
+            Text("There is no song lyrics in this playlist right now. Let's search and add some!")
                 .bold()
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
             
             NavigationLink(destination: SearchView()) {
-                Text("Home")
+                Text("Find Song")
                     .frame(alignment: .center)
                     .foregroundStyle(Color.white)
             }

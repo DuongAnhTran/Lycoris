@@ -9,7 +9,7 @@ This app mainly supports the iOS platform. However, it is also usable on iPadOS 
 ## Installation:
 1. Clone the repo: `git clone https://github.com/DuongAnhTran/Lycoris.git`
 2. Open the files in Xcode
-3. Change the application's signings based on intended use (Either simulation or Apple devices)
+3. Change the application's signings based on intended use (Either simulation or Apple devices. Please choose no signing if the app is going to run on a simulation)
 4. Build and run the application.
 
 
@@ -21,7 +21,18 @@ This app mainly supports the iOS platform. However, it is also usable on iPadOS 
 - External libraries and API:
   - lrclib.net (`https://github.com/tranxuanthang/lrclib` or `https://lrclib.net/docs`)
  
-## Usages:
+## Usage Instruction:
+- For Online lyrics access:
+  - Open the app
+  - Click on "Get Started" and start searching for you favourite song lyrics
+
+- Searching and Saving Lyrics for offline access through caching:
+  - Open the app
+  - Click on "Your Playlist" and create your playlist
+  - Click on the playlist and follow the prompt to navigate to search
+  - Search for the song and click on the detail
+  - Click add (The "+" Button on the top right) and choose the destination playlist
+  - Open the playlist to access your cached lyrics!
 
 
 
