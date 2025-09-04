@@ -116,12 +116,12 @@ class LrcRecordLoader: ObservableObject {
     
     
     
-    // The function that get the results that is album related based on the query (Have to filter out from the general query since API only support general query search and song name search)
+    // The function that get the results that is album related based on the query (Have to filter out from the general query since API only support general query search and song name search). It will try to find results that either fully or partially match the query since there is not too many songs that can go into this category due to the API restriction
     func fetchResultAlbum(results: [LrcRecord], query: String) {
         resultsAlbum.removeAll()
         
         for song in self.results {
-            if song.albumName?.lowercased().contains(query.lowercased()) == true {
+            if isPartialWordMatch(input: query, target: song.albumName ?? "") {
                 resultsAlbum.append(song)
             }
         }
@@ -134,12 +134,12 @@ class LrcRecordLoader: ObservableObject {
     }
     
     
-    // The function that get the results that is artist related based on the query (Have to filter out from the general query since API only support general query search and song name search)
+    // The function that get the results that is artist related based on the query (Have to filter out from the general query since API only support general query search and song name search). It will try to find results that either fully or partially match the query since there is not too many songs that can go into this category due to the API restriction
     func fetchResultArtist(results: [LrcRecord], query: String) {
         resultsArtist.removeAll()
         
         for song in self.results {
-            if song.artistName?.lowercased().contains(query.lowercased()) == true {
+            if isPartialWordMatch(input: query, target: song.artistName ?? "") {
                 resultsArtist.append(song)
             }
         }
@@ -161,5 +161,19 @@ class LrcRecordLoader: ObservableObject {
     }
     
     
+    
+    // Extra function for matching word partially between the search query and the target attribute of the song
+    func isPartialWordMatch(input: String, target: String) -> Bool {
+        let searchWords = input.lowercased().split(separator: " ")
+        let targetLower = target.lowercased()
+
+        for word in searchWords {
+            if targetLower.contains(word) {
+                return true
+            }
+        }
+        return false
+    }
+
     
 }
