@@ -9,17 +9,20 @@
 
 /**
     A view model that is repsonsible for changes made to a playlist (specifically the songs in a playlist)
+    This view model conforms to the `ViewModelTemplate` that contains a filter function to filter item
  **/
 
 import Foundation
 import SwiftUI
 
-class LyricsViewModel: ObservableObject, ModelSavingTemplate {
-    typealias Input = LrcGroup
+class LyricsViewModel: ObservableObject, ViewModelTemplate {
     
+    /// Declaring the type of Input and Output that will be using as this class conforms to `ViewModelTemplate` (for `filter` function)
+    typealias Input = LrcGroup
     typealias Output = [LrcRecord]
     
-    private var cacher = PlaylistViewModel()
+    
+    private var cacher = PlaylistsViewModel()
     
     /*
         Add function was done through accessing list of playlists' indexes directly (through Picker). Therefore
@@ -49,19 +52,19 @@ class LyricsViewModel: ObservableObject, ModelSavingTemplate {
      */
     func removeSongfromPlaylist(index: Int, playlist: inout LrcGroup, listOfPlaylists: inout [LrcGroup]) {
         playlist.songList.remove(at: index)
-        updatePlaylist(playlist: playlist, listOfPlaylist: &listOfPlaylists)
+        updatePlaylistSong(playlist: playlist, listOfPlaylist: &listOfPlaylists)
         cacher.saveToCache(playlists: listOfPlaylists)
     }
     
     // Update the list of playlists whenever a playlist is modified
-    func updatePlaylist(playlist: LrcGroup, listOfPlaylist: inout [LrcGroup]) {
+    func updatePlaylistSong(playlist: LrcGroup, listOfPlaylist: inout [LrcGroup]) {
         if let index = listOfPlaylist.firstIndex(where: { $0.id == playlist.id }) {
             listOfPlaylist[index] = playlist
         }
     }
     
 
-    
+    // A function to filter the result list based on the search string
     func filter(input: LrcGroup, searchText: String) -> [LrcRecord] {
         var filteredSongs: [LrcRecord] = []
         for song in input.songList {

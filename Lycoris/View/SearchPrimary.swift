@@ -11,6 +11,7 @@ import SwiftUI
 
 
 // This is a child view of SearchView (created mainly to make it is easier to read because SearchView is too clustered)
+// This view will contain the picker, the list of result song and the search bar UI element
 struct SearchPrimary: View {
     
     @ObservedObject var loader: LrcRecordLoader

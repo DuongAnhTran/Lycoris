@@ -12,7 +12,7 @@ import SwiftUI
     The view that shows the list of playlists
  */
 struct PlaylistView: View {
-    @EnvironmentObject var cacher: PlaylistViewModel
+    @EnvironmentObject var cacher: PlaylistsViewModel
     @State private var addPlaylist: Bool = false
     @State private var newPlaylistName: String = ""
     @State private var searchString: String = ""
@@ -55,7 +55,7 @@ struct PlaylistView: View {
                         NavigationLink {
                             // Show view for each playlist (Go top the playlist detail view)
                             PlaylistDetailsView(playlist: playlist, playlistList: playlists)
-                                .environmentObject(PlaylistViewModel())
+                                .environmentObject(PlaylistsViewModel())
                         } label: {
                             // Showing the label using the view that conforms to the custom list
                             playlistInfo(Text1: playlist.name, Text2: formatter.string(from: playlist.creationTime))
@@ -69,20 +69,22 @@ struct PlaylistView: View {
                         playlists = cacher.loadFromCache()
                     }
             }
-            //
+            // Allow a search bar to show up when the user pull down the plylist list. Assisting in finding the right playlist
             .searchable(text: $searchString, prompt: "Search for playlist")
             
         }
         .navigationTitle("Playlists")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing){
+                // The plus icon to add new playlist to the collection.
                 Button(action: {
                     addPlaylist = true
                     
                 }) {
                     Image(systemName: "plus")
                 }
-                // An extra view made by alert (for lightweight and clean display) for playlist name
+                // An extra view made by alert (for lightweight and clean display) for user to add in playlist name. (User can only add playlist when they give it a name)
+                // User are restricted to have playlist that have different name (different capitalisation doesnt matter)
                 .alert("Notification", isPresented: $addPlaylist) {
                     TextField("Name for playlist", text: $newPlaylistName)
                     Button("Add", role: .destructive) {
@@ -90,7 +92,7 @@ struct PlaylistView: View {
                         addPlaylist = false
                         newPlaylistName = ""
                     }
-                    .disabled(newPlaylistName.isEmpty)
+                    .disabled(newPlaylistName.isEmpty || cacher.checkPlaylistExist(name: newPlaylistName))
                     
                     Button("Cancel", role: .cancel){
                         addPlaylist = false
@@ -117,5 +119,5 @@ struct playlistInfo: TwoColumnList {
 
 #Preview {
     PlaylistView()
-        .environmentObject(PlaylistViewModel())
+        .environmentObject(PlaylistsViewModel())
 }

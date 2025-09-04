@@ -1,15 +1,21 @@
 //
-//  PlaylistViewModel.swift
+//  PlaylistsViewModel.swift
 //  Lycoris
 //
 //  Created by Dương Anh Trần on 25/8/2025.
 //
 
+
+/**
+    A view model that will be responsible for direct changes to the list of playlist (including saving the data of that the user chose to save)
+    This view model also conforms to the protocol `ViewModelTemplate`
+ */
 import Foundation
 
-class PlaylistViewModel: ObservableObject, ModelSavingTemplate {
-    typealias Input = [LrcGroup]
+class PlaylistsViewModel: ObservableObject, ViewModelTemplate {
     
+    /// Declaring the type of Input and Output that will be using as this class conforms to `ViewModelTemplate` (for `filter` function)
+    typealias Input = [LrcGroup]
     typealias Output = [LrcGroup]
     
     @Published var playlists: [LrcGroup] = []
@@ -56,6 +62,18 @@ class PlaylistViewModel: ObservableObject, ModelSavingTemplate {
             }
         }
         return filteredPlaylists
+    }
+    
+    
+    func checkPlaylistExist(name: String) -> Bool {
+        let playlists = loadFromCache()
+        for eachPlaylist in playlists {
+            if eachPlaylist.name.lowercased() == name.lowercased()  {
+                return true
+            }
+        }
+        
+        return false
     }
     
 }

@@ -12,7 +12,7 @@ import SwiftUI
 // The view that show the detail of the chosen playlist
 struct PlaylistDetailsView: View {
     @State var playlist: LrcGroup
-    @EnvironmentObject var cacher: PlaylistViewModel
+    @EnvironmentObject var cacher: PlaylistsViewModel
     @State var playlistList: [LrcGroup]
     @State var empty: Bool = false
     
@@ -38,7 +38,7 @@ struct PlaylistDetailsView: View {
                 
                 // Showing the list of song in this playlist
                 SongListPlaylist(lyricsViewModel: LyricsViewModel(), playlist: $playlist, playlistList: $playlistList)
-                    .environmentObject(PlaylistViewModel())
+                    .environmentObject(PlaylistsViewModel())
 
             }
             

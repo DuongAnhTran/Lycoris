@@ -15,8 +15,6 @@ struct SearchView: View {
     @State var clickedReset = false
     
     
-    var isPhone = (UIDevice.current.userInterfaceIdiom == .phone)
-    
     //For different tabs for different results:
     @State private var selectedCategory: SearchCategory = .all
 
@@ -40,12 +38,6 @@ enum SearchCategory: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
-
-struct SecondaryView: View {
-    var body: some View {
-        Text("Hello")
-    }
-}
 
 
 #Preview {

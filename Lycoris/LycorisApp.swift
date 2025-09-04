@@ -13,7 +13,7 @@ struct LycorisApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(PlaylistViewModel())
+                .environmentObject(PlaylistsViewModel())
         }
     }
 }

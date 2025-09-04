@@ -26,9 +26,10 @@ struct HomeView: View {
                     .frame(alignment: .top)
                     .font(.largeTitle)
                     
-
+                // The app logo at the home screen. The logo will change color based on the color theme of the device
                 Image(darkMode ? "logo-walter" : "logo")
                     .padding(.bottom, 20)
+                
                 // Go to searching lyric view
                 NavigationLink(destination: SearchView()) {
                     Text("Get Started")
@@ -42,7 +43,7 @@ struct HomeView: View {
                 .padding(.bottom, 20)
                 
                 // Go to the list of playlists
-                NavigationLink(destination: PlaylistView().environmentObject(PlaylistViewModel())) {
+                NavigationLink(destination: PlaylistView().environmentObject(PlaylistsViewModel())) {
                     Text("Your Playlist")
                         .font(.title)
                         .frame(width: 180, height: 80)

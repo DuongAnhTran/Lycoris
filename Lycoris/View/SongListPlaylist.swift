@@ -14,7 +14,7 @@ import SwiftUI
         - The view takes in a copy of `lyricViewModel` to conduct song assertion and deletion (mainly deletion) directly in the list
         - Contains bindings of the chosen playlist and the actual list of playlists since any changes in the list of songs in a playlist
             also changes the lists of playlists that is getting cached into UserDefaults
-        - The view also takes in the environment object PlaylistViewModel to perform caching data into UserDefaults (UserDefaults only
+        - The view also takes in the environment object PlaylistsViewModel to perform caching data into UserDefaults (UserDefaults only
             cache the list of playlists)
  */
 
@@ -22,7 +22,7 @@ struct SongListPlaylist: View {
     @ObservedObject var lyricsViewModel: LyricsViewModel
     @Binding var playlist: LrcGroup
     @Binding var playlistList: [LrcGroup]
-    @EnvironmentObject var cacher: PlaylistViewModel
+    @EnvironmentObject var cacher: PlaylistsViewModel
     
     // A variable to observe user input and filter the songs in the playlist (for better access)
     @State var searchText = ""
@@ -44,7 +44,7 @@ struct SongListPlaylist: View {
                 ForEach(Array(filteredSong.enumerated()), id: \.offset) { index, content in
                     NavigationLink {
                         LyricView(song: content, lyricsViewModel: LyricsViewModel())
-                            .environmentObject(PlaylistViewModel())
+                            .environmentObject(PlaylistsViewModel())
                     } label: {
                         VStack(alignment: .leading, spacing: 10){
                             Text("\(content.trackName ?? "None")")
@@ -71,7 +71,7 @@ struct SongListPlaylist: View {
             .searchable(text: $searchText, prompt: "Search Songs in Playlist (by Name)")
             
         } else {
-            // What will show in the song list if there is no songs
+            // What will show in the song list if there is no songs (Notification and a button to go back to Home to add in song)
             Spacer()
             
             Text("There is no song in this playlist right now. Go back to home screen to add songs!")
@@ -88,7 +88,6 @@ struct SongListPlaylist: View {
             .cornerRadius(10)
             .background(RoundedRectangle(cornerRadius: 10)
                 .fill(.blue))
-
 
             Spacer ()
         }

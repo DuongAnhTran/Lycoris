@@ -16,7 +16,7 @@ struct LyricView: View {
     @State var song: LrcRecord
     @State private var options: LyricOption = .showPlainText
     @State private var addSong: Bool = false
-    @EnvironmentObject var cacher: PlaylistViewModel
+    @EnvironmentObject var cacher: PlaylistsViewModel
     @State private var selected: Int? = nil
     @StateObject var lyricsViewModel: LyricsViewModel
     
@@ -89,7 +89,7 @@ struct LyricView: View {
                     .sheet(isPresented: $addSong) {
                         // Open an extra sheet that will ask user which playlist to add the song to
                         SheetView(selected: $selected, addSong: $addSong, lyricsViewModel: lyricsViewModel, song: song, songExist: $songExist)
-                            .environmentObject(PlaylistViewModel())
+                            .environmentObject(PlaylistsViewModel())
                     }
                     
                     
@@ -99,6 +99,8 @@ struct LyricView: View {
     }
 }
 
+
+// The enum created for the two options: plain lyrics and synced lyrics. This is for the alternate view when an option is picked in the horizontal picker
 enum LyricOption: String, CaseIterable, Identifiable {
     var id: String {rawValue}
     

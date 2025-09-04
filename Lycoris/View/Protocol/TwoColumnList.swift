@@ -9,8 +9,9 @@ import Foundation
 import SwiftUI
 
 /**
-    A protocol used to format a list item into 2 columns. Used to show the information
-    of a playlist in the `PlaylistView` (showing the name of the playlist and the creation date)
+    A protocol used to format a list item into 2 columns.
+    
+    In this app, it is used to show the information of a playlist in the `PlaylistView` (showing the name of the playlist and the creation date)
  */
 
 protocol TwoColumnList: View {
