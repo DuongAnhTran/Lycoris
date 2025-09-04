@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// The app will start with the HomeView() when opened
 struct ContentView: View {
     var body: some View {
        HomeView()

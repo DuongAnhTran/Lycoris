@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+// The file that will initiate the start of the app and also feed in the environment variable PlaylistsViewModel for ContentView and other views that is related to it to use
 
 @main
 struct LycorisApp: App {

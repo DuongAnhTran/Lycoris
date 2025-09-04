@@ -10,6 +10,8 @@
 /**
     A view model that is repsonsible for changes made to a playlist (specifically the songs in a playlist)
     This view model conforms to the `ViewModelTemplate` that contains a filter function to filter item
+ 
+    There are no @Published variable since there is cases where @Published can be desync in the actual view if the view has multiple childviews doing different jobs. Additionally, there are cases where these child view can receive the copy of the varibles instead of being able to directly access them. Hence, there is no @Publ;ished varibles, and each function in this View Model will receive input paramters (directly from the view when called) instead.
  **/
 
 import Foundation
@@ -21,11 +23,12 @@ class LyricsViewModel: ObservableObject, ViewModelTemplate {
     typealias Input = LrcGroup
     typealias Output = [LrcRecord]
     
-    
+    // This is an instace of PlaylistViewModel for this View Model to use and cache the data changes when needed
     private var cacher = PlaylistsViewModel()
     
-    /*
-        Add function was done through accessing list of playlists' indexes directly (through Picker). Therefore
+    
+    /**
+        Add function was done through accessing list of playlists' indexes directly (using Picker in `SheetView`). Therefore
         no need to take have extra statements like `removeSongfromPlaylist`
      */
     func addSongToPlaylist(song: LrcRecord, playlist: inout LrcGroup) {
@@ -33,16 +36,16 @@ class LyricsViewModel: ObservableObject, ViewModelTemplate {
     }
     
     
-    // Check if the chosen song/lyric already existed in the playlist
+    // Check if the chosen song/lyric already existed in the playlist and return a boolean value
     func checkLyricsExist(song: LrcRecord, playlist: LrcGroup) -> Bool {
         for eachSong in playlist.songList {
             if song.id == eachSong.id  {
                 return true
             }
         }
-        
         return false
     }
+    
     
     
     // The function used for deleteing a song from a playlist
@@ -56,7 +59,9 @@ class LyricsViewModel: ObservableObject, ViewModelTemplate {
         cacher.saveToCache(playlists: listOfPlaylists)
     }
     
-    // Update the list of playlists whenever a playlist is modified
+    
+    // Update the list of playlists whenever a playlist is modified from the song list
+    // This is needed in some cases where the view doesn't have direct access to the playlists (or only have a copy of playlists)
     func updatePlaylistSong(playlist: LrcGroup, listOfPlaylist: inout [LrcGroup]) {
         if let index = listOfPlaylist.firstIndex(where: { $0.id == playlist.id }) {
             listOfPlaylist[index] = playlist
@@ -65,6 +70,7 @@ class LyricsViewModel: ObservableObject, ViewModelTemplate {
     
 
     // A function to filter the result list based on the search string
+    // The function takes in the input (playlist), which will be directly provided from the view and return the list of songs that contains the given search query
     func filter(input: LrcGroup, searchText: String) -> [LrcRecord] {
         var filteredSongs: [LrcRecord] = []
         for song in input.songList {

@@ -8,7 +8,7 @@
 
 
 /**
-    A 
+    A View Model/Class that is reponsible for loading the data from the API and decode it to native Swift UI format
  */
 
 
@@ -17,13 +17,17 @@ import Foundation
 
 class LrcRecordLoader: ObservableObject {
     
+    // Published variables for different types of result categorires/tabs: general query result, album name results, song name results, artist results (all in the form of list of LrcRecord)
     @Published var results: [LrcRecord] = []
     @Published var resultsAlbum: [LrcRecord] = []
     @Published var resultsSong: [LrcRecord] = []
     @Published var resultsArtist: [LrcRecord] = []
     
+    // Variables to for input query string and loading state
     @Published var query: String = ""
     @Published var loading: Bool = false
+    
+    // Variable to determine if there is result in each of the categories
     @Published var found: Bool = true
     @Published var foundSong: Bool = true
     @Published var foundArtist: Bool = true
@@ -31,7 +35,14 @@ class LrcRecordLoader: ObservableObject {
     
     
     
-    
+    // The function responsible for fetching general query results and decode it to native Swift
+    /**
+        The function will do the following:
+            - Clean the `results` list before proceeding, and if the query string is empty then stop the function
+            - If there is query, validate the URL and fetch if it is valid.
+            - Decode the fetched data and transfer it to the `results` list.
+            - Check if `results` is populated. If yes then set the find status `found` to true and vice versa
+     */
     func fetchResults(query: String) async {
         results.removeAll()
         if query == "" {
@@ -68,7 +79,7 @@ class LrcRecordLoader: ObservableObject {
     
     
     
-    
+    // The function responsible for fetching query results that matches song names and decode it to native Swift (Work similar to the general query above)
     func fetchResultsSong(query: String) async {
         resultsSong.removeAll()
         
@@ -105,7 +116,7 @@ class LrcRecordLoader: ObservableObject {
     
     
     
-    
+    // The function that get the results that is album related based on the query (Have to filter out from the general query since API only support general query search and song name search)
     func fetchResultAlbum(results: [LrcRecord], query: String) {
         resultsAlbum.removeAll()
         
@@ -123,7 +134,7 @@ class LrcRecordLoader: ObservableObject {
     }
     
     
-    
+    // The function that get the results that is artist related based on the query (Have to filter out from the general query since API only support general query search and song name search)
     func fetchResultArtist(results: [LrcRecord], query: String) {
         resultsArtist.removeAll()
         
@@ -141,6 +152,7 @@ class LrcRecordLoader: ObservableObject {
     }
 
     
+    // The function that will reset all the result list (for the reset button)
     func resetResult() {
         results.removeAll()
         resultsSong.removeAll()
