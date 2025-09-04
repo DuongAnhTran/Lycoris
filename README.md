@@ -1,5 +1,5 @@
 # Lycoris
-A convenient and seamless application for searching and accessing song lyrics. Lycoris allows users to search, view, and save their favourite songs' lyrics directly in the application without any constraints or limitations, as long as the song has a plain text lyrics document.
+A convenient and seamless application for searching and accessing song lyrics. Lycoris allows users to search, view, and save their favorite songs' lyrics directly in the application without any constraints or limitations, as long as the song has a plain text lyrics document.
 
 
 ## Supporting platforms:
@@ -17,14 +17,14 @@ This app mainly supports the iOS platform. However, it is also usable on iPadOS 
 - SwiftUI
 - Minimum Deployment: (This can be changed in the code settings, depending on the usage)
   - iOS 18+
-  - 
+  
 - External libraries and API:
-  - lrclib.net (`https://github.com/tranxuanthang/lrclib` or `https://lrclib.net/docs`)
+  - This application utilise and collect information from [lrclib.net API](https://lrclib.net/docs).
  
 ## Usage Instruction:
 - For Online lyrics access:
   - Open the app
-  - Click on "Get Started" and start searching for you favourite song lyrics
+  - Click on "Get Started" and start searching for you favorite song lyrics
 
 - Searching and Saving Lyrics for offline access through caching:
   - Open the app

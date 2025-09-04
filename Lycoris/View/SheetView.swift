@@ -10,13 +10,21 @@ import SwiftUI
 
 struct SheetView: View {
     
+    // Variable to dismiss the sheet
     @Environment(\.dismiss) var dismiss
+    
+    // Variable to access cacher and functions
     @EnvironmentObject var cacher: PlaylistsViewModel
+    
+    // Binding variables to check the current situation of the picker (if user chose a playlist to save song or not), the current situation whether if the user is adding a song (when click the 'add' button), and the status to whether if the chosen song already exist
     @Binding var selected: Int?
     @Binding var addSong: Bool
+    @Binding var songExist: Bool
+    
+    // Variable for Lyric View Model and a State variable to get the song chosen from LyricView
     @ObservedObject var lyricsViewModel: LyricsViewModel
     @State var song: LrcRecord
-    @Binding var songExist: Bool
+    
     
     // Environment variable that observe the current color theme of the device
     @Environment(\.colorScheme) var colorScheme
@@ -56,16 +64,25 @@ struct SheetView: View {
 
 
             // Add button to add song to the chosen playlist
-            // This button will show an alert if the playlist already contain the song
+            // This button will show an alert if the playlist already contain the song. But still add if the user insist
             Button("Add", role: .destructive) {
+                // Only enable if there is a playlist chosen in the picker
                 if selected != nil {
+                    // Stop the process if the selected index from picker is not matching with the playlist list
                     guard playlists.indices.contains(selected!) else {
                         addSong = false
                         return
                     }
+                    
+                    // Check whether the chosen song is already existing. Yes -> Open alert. No -> Add right away
                     if (lyricsViewModel.checkLyricsExist(song: song, playlist: playlists[selected!])) {
                         songExist = true
                     } else {
+                        // Ensure the song added is right
+                        print("Adding to playlist ID: \(playlists[selected!].showID())")
+                        print("Adding song: \(song.showID())")
+                        // In this case, the playlist is accessed using index directly through list of playlists (`playlists`). Therefore no need to use the update function in LyricsViewModel (only for deleting case where playlist cannot be directly accessed)
+                        // Reset status variables, while also adding the song
                         songExist = false
                         lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
                         cacher.saveToCache(playlists: playlists)
@@ -89,12 +106,16 @@ struct SheetView: View {
                     // Ensure that adding is done to a valid song and adding to valid playlist, can force unwrap because validated before
                     print("Adding to playlist ID: \(playlists[selected!].showID())")
                     print("Adding song: \(song.showID())")
+                    // In this case, the playlist is accessed using index directly through list of playlists (`playlists`). Therefore no need to use the update function in LyricsViewModel (only for deleting case where playlist cannot be directly accessed)
+                    // Reset status variables, while also adding the song
                     songExist = false
-                    addSongAndCache(song: song, playlist: &playlists[selected!], playlists: playlists)
+                    lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlists[selected!])
+                    cacher.saveToCache(playlists: playlists)
                     addSong = false
                     selected = nil
                 }
                 
+                // Cancel and close the alert
                 Button("Cancel", role: .cancel) {
                     addSong = false
                     songExist = false
@@ -115,13 +136,4 @@ struct SheetView: View {
             
         }
     }
-    
-    
-    /// An extra function to do both adding and caching at the same time directly without the need to use `updatePlaylistSong`
-    ///     like when deleting (since in this case, the playlist is accessed using index directly through list of playlists (`playlists`). In the case of deleting, this is provided. Therefore need to explicitly use update function)
-    func addSongAndCache(song: LrcRecord, playlist: inout LrcGroup, playlists: [LrcGroup]) {
-        lyricsViewModel.addSongToPlaylist(song: song, playlist: &playlist)
-        cacher.saveToCache(playlists: playlists)
-    }
-    
 }
