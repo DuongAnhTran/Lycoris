@@ -71,7 +71,7 @@ struct SongListPlaylist: View {
             .searchable(text: $searchText, prompt: "Search Songs in Playlist (by Name)")
             
         } else {
-            // What will show in the song list if there is no songs (Notification and a button to go back to Home to add in song)
+            // What will show in the song list if there is no songs (Notification and a button to go SearchView to add in song)
             Spacer()
             
             Text("There is no song in this playlist right now. Go back to home screen to add songs!")
@@ -79,7 +79,7 @@ struct SongListPlaylist: View {
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
             
-            NavigationLink(destination: HomeView()) {
+            NavigationLink(destination: SearchView()) {
                 Text("Home")
                     .frame(alignment: .center)
                     .foregroundStyle(Color.white)
