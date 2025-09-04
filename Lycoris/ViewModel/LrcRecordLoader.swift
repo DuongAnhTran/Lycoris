@@ -162,7 +162,9 @@ class LrcRecordLoader: ObservableObject {
     
     
     
-    // Extra function for matching word partially between the search query and the target attribute of the song
+    // Extra function for matching word partially between the search query and the target attribute of the song (album and artist name)
+    // Split the query into multiple parts (separate through whitespace), and for each part, check if the target has that part
+    // If yes -> return true and vice versa
     func isPartialWordMatch(input: String, target: String) -> Bool {
         let searchWords = input.lowercased().split(separator: " ")
         let targetLower = target.lowercased()
