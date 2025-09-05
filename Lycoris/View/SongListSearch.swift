@@ -11,6 +11,7 @@ import SwiftUI
 
 // A song list view for song searching
 struct SongListSearch: View {
+    // A variable to get the search results and display it in a list (obtained the info from the parent view SearchPrimary())
     @Binding var listContent: [LrcRecord]
     
     var body: some View {
@@ -20,7 +21,7 @@ struct SongListSearch: View {
                 LyricView(song: content, lyricsViewModel: LyricsViewModel())
                     .environmentObject(PlaylistsViewModel())
             } label: {
-                // Labelk for the list item: Includes track name, artist name and album
+                // Label for the list item: Includes track name, artist name and album
                 VStack(alignment: .leading, spacing: 10){
                     Text("\(content.trackName ?? "None")")
                         .font(.headline)

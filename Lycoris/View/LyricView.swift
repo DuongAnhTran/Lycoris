@@ -13,14 +13,22 @@ import SwiftUI
 // This view show thew actual song information and the lyric of that song
 struct LyricView: View {
     
+    // State song varibale to recieve the song infomation from the previous view
     @State var song: LrcRecord
+    
+    // State to check if the user is choosing plan or synced lyrics
     @State private var options: LyricOption = .showPlainText
+    
+    // State variable to check if the program in in the state of adding song
     @State private var addSong: Bool = false
+    
     @EnvironmentObject var cacher: PlaylistsViewModel
+    
+    // State variable to check if the user picked anything in the picker from the SheetView (A child view of this)
     @State private var selected: Int? = nil
     @StateObject var lyricsViewModel: LyricsViewModel
     
-    
+    // A variable to chjeck if the song exist already
     @State private var songExist: Bool = false
     
     // For dismissing the extra sheet when adding song to playlist

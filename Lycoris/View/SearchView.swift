@@ -11,6 +11,8 @@ import SwiftUI
 
 struct SearchView: View {
     @StateObject var loader = LrcRecordLoader()
+    
+    // State variable to track the query and check whether the user went to rest the search result (clear search results)
     @State var query = ""
     @State var clickedReset = false
     

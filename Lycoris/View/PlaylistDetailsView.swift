@@ -11,10 +11,12 @@ import SwiftUI
 
 // The view that show the detail of the chosen playlist
 struct PlaylistDetailsView: View {
+    
+    // This view takes information of the playlist from the PlaylistView(), along with the list of playlists (this is for later on when the user add song into the chosen playlist and have to cache the information back to user defaults)
     @State var playlist: LrcGroup
     @EnvironmentObject var cacher: PlaylistsViewModel
     @State var playlistList: [LrcGroup]
-    @State var empty: Bool = false
+    
     
     // Declaring date format
     let formatter: DateFormatter = {

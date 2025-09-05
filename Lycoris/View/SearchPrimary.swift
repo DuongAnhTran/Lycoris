@@ -15,6 +15,8 @@ import SwiftUI
 struct SearchPrimary: View {
     
     @ObservedObject var loader: LrcRecordLoader
+    
+    // Getting the information the current query, the selected category and status on whether the user want search resuklt clear from the parent view SearchVioew()
     @Binding var query: String
     @Binding var selectedCategory: SearchCategory
     @Binding var clickedReset: Bool
@@ -35,6 +37,7 @@ struct SearchPrimary: View {
                     
                     ZStack {
                         List {
+                            // Show the list of songs resukted in the four categories of search using a child view named SongListSearch()
                             switch selectedCategory {
                             case .all:
                                 SongListSearch(listContent: $loader.results)

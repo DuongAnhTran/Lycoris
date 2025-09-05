@@ -13,6 +13,8 @@ import SwiftUI
  */
 struct PlaylistView: View {
     @EnvironmentObject var cacher: PlaylistsViewModel
+    
+    // State variables to track if the user is in the process of adding playlist, tracking the input name that the user is trying to give the new plalist and track the search string to filter the playlist by name if needed
     @State private var addPlaylist: Bool = false
     @State private var newPlaylistName: String = ""
     @State private var searchString: String = ""
